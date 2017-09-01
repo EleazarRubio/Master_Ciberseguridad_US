@@ -1,4 +1,4 @@
-FROM golang:latest
+FROM golang:1.8.3
 
 ENV GOPATH /go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$GOPATH/src/github.com/jgsqware/clairctl:$PATH

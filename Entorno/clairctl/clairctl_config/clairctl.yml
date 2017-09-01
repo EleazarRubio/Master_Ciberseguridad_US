@@ -8,6 +8,3 @@ clair:
 clairctl:
   port: 57330
   tempfolder: ./tmp
-#docker:
-#  insecure-registries:
-#    - registry:5000
