@@ -1,0 +1,51 @@
+%!TEX root =../MemoriaTFM.tex
+\chapter*{Resumen}
+\pagestyle{especial}
+\chaptermark{Resumen}
+\phantomsection
+\addcontentsline{toc}{listasf}{Resumen}
+
+\lettrine[lraise=-0.1, lines=2, loversize=0.2]{E}{n} los últimos tiempos de las empresas dedicadas al desarrollo de \gls{SaaS}, los conceptos de metodología ágil y la filosofía \gls{DevOps} están cobrando, cada vez más, un papel fundamental para el desarrollo de las mismas\cite{consultorit2017}. Según un estudio de alcance mundial realizado recientemente por CA Technologies, más del 75 por ciento de las organizaciones españolas coinciden en que las metodologías ágiles y \gls{DevOps} son cruciales para el éxito de la transformación digital\cite{catechnologies2017}. 
+
+Este nuevo modo de entender el mundo del desarrollo de \gls{SW} posee una serie de elementos comunes, cada uno de ellos implementado con herramientas cada vez más conocidas y populares para las empresas que lo llevan a la práctica: 
+
+\begin{itemize}
+	\item Plataformas de desarrollo colaborativo y control de versiones de \gls{SW} (por ejemplo \href{https://github.com/}{GitHub}), donde se almacena el código desarrollado por las mismas.
+	\item Diferentes entornos o infraestructuras de trabajo para los desarrolladores, que van a permitir un desarrollo y despliegue continuo para las mejoras del producto: entornos de desarrollo, entornos de seguro de calidad o \gls{QA}, preproducción, producción o entorno final, etc.
+	\item Software de integración continua, en inglés \gls{CI}, con las que automatizar los trabajos de despliegue de software.
+	\item Plataformas basadas en el despliegue de contenedores (generalmente \href{https://www.docker.com/}{Docker}) que encapsulan los distintos elementos que componen el producto final y optimizan los recursos utilizados en las máquinas que los contienen, en su mayoría subcontratadas a terceras compañías (\href{https://aws.amazon.com/es/}{Amazon Web Services}, \href{https://azure.microsoft.com/es-es/}{Microsoft Azure}, etc.).
+\end{itemize}
+
+En el presenta \gls{TFM} se pretende aportar e introducir al proceso comentado (y haciendo uso de las herramientas que este provee) una serie de análisis de seguridad que, ejecutados periódicamente, provean a la compañía de informes con los que poder identificar los siguientes problemas de seguridad durante el desarrollo de sus aplicaciones, siempre en continua integración con la línea de trabajo:
+
+\begin{enumerate}
+	\item Si la aplicación creada tiene Vulnerabilidades (\href{https://cve.mitre.org/}{\gls{CVE}}) en las librerías de dependencias de código utilizadas.
+	\item Si la imagen que se va a emplear para desplegar el contenedor de dicho \gls{SW} contiene vulnerabilidades conocidas al nivel de \gls{SO}.
+\end{enumerate}
+
+\TODO{TODO - Cambiar enlaces por referencias bibliográficas.}
+
+\chapter*{Abstract}
+\pagestyle{especial}
+\chaptermark{Abstract}
+\phantomsection
+\addcontentsline{toc}{listasf}{Abstract}
+
+\lettrine[lraise=-0.1, lines=2, loversize=0.2]{L}{ately} inside Software as a Service (\gls{SaaS}) companies, the agile methodology and \gls{DevOps} philosophy concepts are taking a fundamental role for the development of them\cite{consultorit2017}. According to a recent global survey by CA Technologies, more than 75 percent of Spanish organizations agree that DevOps and agile methodologies are crucial to the success of digital transformation\cite{catechnologies2017}.
+
+This new way of understanding the world of \gls{SW} development has a various common elements, each of them implemented with well known and popular tools for the companies that put it into practice:
+
+\begin{itemize}
+\item Collaborative development platforms and \gls{SW} version control systems (for example \href{https://github.com/}{GitHub}), where the code developed is keeped.
+\item Different environments and infrastructures for developers, which will allow to continuous development and deployment for product enhancements: development environments, Quality Assurance \gls{QA} environments, pre-production, production or final environment, etc.
+\item Continuous integration \gls{CI} software, with which to automate the software deployment.
+\item Platforms based on container deployment (usually \href{https://www.docker.com/}{Docker}) that encapsulate elements that make up the final product and optimize the resources used in the machines that contain them, mostly subcontracted to third parties (\href{https://aws.amazon.com/es/}{Amazon Web Services}, \href{https://azure.microsoft.com/es-es/}{Microsoft Azure}, etc.).
+\end{itemize}
+
+In the present master's thesis is intended to contribute and introduce to the process discussed (making use of the tools it provides), security analyzes that periodically executed provide the company with reports with which Identify the following security issues along of the process of development applications, always in continuous integration with the company pipeline:
+
+\begin{enumerate}
+\item If the application created has Vulnerabilities (\href{https://cve.mitre.org/}{\gls{CVE}}) in the code dependencies used.
+\item If the image used to deploy the container of the mentioned \gls{SW} contains known vulnerabilities at the \gls{OS} level.
+\end{enumerate}
+

@@ -1,0 +1,61 @@
+version: '2'
+services:
+  postgres:
+    container_name: clair_postgres
+    image: postgres:latest
+    restart: unless-stopped
+    volumes:
+      - "data-postgres:/var/lib/postgresql/data"
+    environment:
+      POSTGRES_PASSWORD: password
+
+  clair:
+    container_name: clair_clair
+    image: quay.io/coreos/clair-git:latest
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    ports:
+      - "6060-6061:6060-6061"
+    links:
+      - postgres
+    volumes:
+      - /tmp:/tmp
+      - ./clair_config:/config
+    command: [-config, /config/config.yaml]
+
+  clairctl:
+    build: ./clairctl
+    container_name: clair_clairctl
+    command: [echo, Hello from clairctl container]
+
+  ruby-tool:
+    build: ./audit-tools/ruby
+    container_name: ruby-tool
+    command: [echo, Hello from ruby-tool container]
+
+  nodejs-tool:
+    build: ./audit-tools/nodejs
+    container_name: nodejs-tool
+    command: [echo, Hello from nodejs-tool container]
+
+  jenkins:
+    build: ./jenkins
+    container_name: jenkins
+    ports:
+      - "80:8080"
+    restart: "always"
+    volumes:
+      - "data-jenkins:/var/jenkins_home"
+      - "reports:/reports"
+      - "/usr/bin/docker:/usr/bin/docker"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "/usr/lib/x86_64-linux-gnu/libltdl.so.7:/usr/lib/x86_64-linux-gnu/libltdl.so.7"
+
+volumes:
+  data-jenkins:
+    driver: "local"
+  data-postgres:
+    driver: "local"
+  reports:
+    driver: "local"

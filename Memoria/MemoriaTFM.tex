@@ -1,0 +1,215 @@
+%:Clase del documento
+\documentclass[fontsize=10pt, Myfinal=false, twoside, numbers=noenddot]{scrbook}
+%Minion=true, English=true, Myfinal=true
+
+%:Paquete de estilos original
+\usepackage{libroETSI}
+
+%:Paquete específico para cargar tikz (y sus librerías) y pgfplots
+\usepackage{dtsc-creafig}
+
+%:Paquete para notaciones específicas
+\usepackage{notacion}
+
+%:Paquete para incorporar aspectos concretos de la edición
+\usepackage{edicionPFC}
+
+\usepackage{indentfirst}
+
+%:Espacio de una línea entre párrafos
+\setlength{\parskip}{\baselineskip}
+
+%:Evitar que LaTex corte las palabras.
+\pretolerance=2000
+\tolerance=3000
+
+\newcommand{\bibhref}[3][blue]{\href{#2}{\color{#1}{#3}}}%
+
+\AtBeginDocument{%
+	\renewcommand\bibname{Referencias}
+}
+
+\newcommand\TODO[1]{\textcolor{red}{#1}}
+%:\renewcommand\TODO[1]{} %PARA OCULTARLAS
+
+%:Para modificar fácilmente la fuente del texto.
+\makeatletter
+\ifdtsc@Minion
+\ifluatex
+\setmainfont[Renderer=Basic, Ligatures=TeX,	% Fuente del texto 
+Scale=1.01,
+]{Minion Pro}
+% En este caso conviene modificar ligeramente el tamaño de las fuentes matemáticas
+\DeclareMathSizes{10}{10.5}{7.35}{5.25}
+\DeclareMathSizes{10.95}{11.55}{8.08}{5.77}
+\DeclareMathSizes{12}{12.6}{8.82}{6.3}
+\fi
+\else
+\ifluatex
+\setmainfont[Renderer=Basic, Ligatures=TeX, 
+Scale=1.0,
+]{Times New Roman}
+\else
+\usepackage{tgtermes}
+\fi
+\fi
+\makeatother
+
+\makeglossaries
+
+%Lista de acrónimos para el glosario
+\newacronym{SaaS}{SaaS}{software como servicio}
+\newacronym{DevOps}{DevOps}{Development and Operations}
+\newacronym{SW}{SW}{software}
+\newacronym{QA}{QA}{Quality Assurance}
+\newacronym{CI}{CI}{Continuous Integration}
+\newacronym{TFM}{TFM}{Trabajo Fin de Máster}
+\newacronym{SO}{SO}{Sistema Operativo}
+\newacronym{OS}{OS}{Operative System}
+\newacronym{TI}{TI}{Tecnología de la información}
+\newacronym{CVE}{CVE}{Common Vulnerabilities and Exposures}
+\newacronym{IC}{IC}{Integración continua}
+
+%\href{https://jenkins.io/}{Jenkins}
+
+% Formato A4
+\geometry
+{paperheight=297mm,%
+	paperwidth=210mm,%
+	top=25mm,%
+	headsep=8.5mm,%
+	includefoot, 
+	textheight=240mm, 
+	textwidth=150mm, 
+	bindingoffset=0mm, 
+	twoside}
+
+\usepackage[a4,center]{crop}%para poner las cruces de esquina de página, poner la opción cross
+
+%:Esquema de numeración por defecto
+\setenumerate[1]{label=\normalfont\bfseries{\arabic*.}, leftmargin=*, labelindent=\parindent}
+\setenumerate[2]{label=\normalfont\bfseries{\alph*}), leftmargin=*}
+\setenumerate[3]{label=\normalfont\bfseries{\roman*.}, leftmargin=*}
+\setlist{itemsep=.1em}
+\setlength{\parindent}{1.0 em}
+
+% El nivel hasta el que se muestra el índice 
+\setcounter{tocdepth}{1}
+
+%:Empieza el documento
+
+\begin{document}
+	
+	%:Para incluir toda la referencia bibliográfica aunque no se cite, descomente la siguiente línea
+	%:\nocite{*}
+	
+	%:Inicio de la portada
+	
+	%:Para crear la portada y la portada interior (pagina titular)
+	\titulo{Seguridad en la integración continua de la metodología ágil y la filosofía DevOps} %\mbox evita que se divida una palabra al cambiar de línea
+	\autor{Eleazar Rubio Sorrentino}
+	\director{Juan Manuel Vozmediano Torres}
+	\titulodirector{Profesor Titular}
+	
+	\departamento{Dep. de Ingeniería Telemática}
+	\centro{Escuela Técnica Superior de Ingeniería}
+	\universidad{Universidad de Sevilla}
+	\titulacion{Ingeniería de Telecomunicación}
+	\fecha{2017}
+	\nombretrabajo{Trabajo Fin de Máster}
+	
+	\hypersetup
+	{
+		linkcolor=black, %Enlaces en color negro.
+		pdfauthor={\elautor},
+		pdftitle={\nombretrabajo,\eltitulo}, 
+		pdfkeywords={Latex, edición, formato de texto}	
+	}
+	
+	%:logo de la Universidad y logo del departamento.
+	\portadaPFC{figuras/LogoUS.pdf}{figuras/LogoIT.pdf}
+	
+	%:Fin de la portada
+	
+	%:Todo lo que constituye la primera parte del libro que no es el cuerpo del libro en realidad
+	\frontmatter
+	%:Pone la numeración en mayúscula (al menos en español).
+	\pagenumbering{Roman}
+	
+	\include{agradecimientos/agradecimientos}
+	
+	\include{resumen/resumen}
+	
+	%:Índice
+	\cleardoublepage
+	\phantomsection
+	\pagestyle{especial}
+	\tableofcontents
+	
+	%:Empieza el contenido del libro
+	\mainmatter
+	
+	%:Página por defecto
+	\pagestyle{esitscCD}
+	
+	%:Los diferentes capítulos, en carpetas separadas
+	
+	\include{introduccion/introduccion}
+	
+	\include{tecnica/tecnica}
+	
+	\include{entorno/entorno}
+	
+	\include{desarrollo/desarrollo}
+	
+	\include{conclusiones/conclusiones}
+	
+	%:Empieza todo lo que no constituye el cuerpo en si del libro.
+	\backmatter
+	
+	%:Indice de figuras.
+	\cleardoublepage
+	\phantomsection
+	
+	%:Para añadir una línea en blanco en el TOC y separar esta lista
+	\addtocontents{toc}{\protect\mbox{}\protect\hspace*{0pt}\par}
+	\addcontentsline{toc}{listasb}{\listfigurename}
+	\pagestyle{especial}
+	\listoffigures
+	
+	%:Indice de tablas, coméntese las siguientes líneas si no se desea
+	%:\cleardoublepage
+	%:\phantomsection
+	%:\addcontentsline{toc}{listasb}{\listtablename}
+	%:\pagestyle{especial}
+	%:\listoftables
+	
+	%:Indice de Código
+	\cleardoublepage
+	\phantomsection
+	\addcontentsline{toc}{listasb}{\lstlistlistingname}
+	\pagestyle{especial}
+	\lstlistoflistings
+	
+	%:Bibliografía con biblatex y biber
+	\cleardoublepage
+	\phantomsection
+	\addcontentsline{toc}{listasb}{\refname}
+	\pagestyle{especial}
+	%BIBER
+	%\printbibliography[heading=etsi]z
+	%BIBTEX
+	%\bibliographystyle{IEEEtran}
+	\bibliographystyle{amsplain} %flexbib amsplain alpha
+	%:Fichero con la bibliografía, BIBTEX
+	\bibliography{bibliografia}
+	
+	
+	%:Acrónimos
+	\cleardoublepage
+	\phantomsection
+	\addcontentsline{toc}{listasb}{\glossaryname}
+	\chaptermark{\glossaryname}
+	\printglossary[type=\acronymtype,title=Glosario]
+	
+\end{document}
