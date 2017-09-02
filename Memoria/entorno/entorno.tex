@@ -36,7 +36,7 @@ A continuación se muestran algunas de las características que han llevado a Gi
 \TODO{TODO - Una frase de cierre al apartado}
 
 
-\section{bundler-audit}
+\section{Bundler-audit}
 
 Como ya fue comentado en el apartado \ref{chp-02} cada aplicación tiene sus dependencia, y estas a su vez pueden contener vulnerabilidades de seguridad. Encontrar las vulnerabilidades de seguridad que presenta una aplicación es una tarea necesaria y tediosa, que de ser obviada no impedirá que la aplicación generada siga siendo ejecutada como si todo estuviera funcionando en perfectas condiciones, pero que ocultará agujeros en la aplicación que podrán ser utilizados en diversa manera por algún usuario malintencionado.
 
@@ -106,13 +106,67 @@ $ bundle audit check --ignore OSVDB-108664
 
 \TODO{TODO - Cierre del apartado. de Rubysec para proyectos Ruby}
 
-\section{nsp}
+\section{Nsp}
 
-de Node Security Platform para proyectos NodeJS
+Nsp es la principal herramienta de interfaz de línea de comandos de Node Security Platform y es una de las herramientas más utilizadas para monitorizar la seguridad en aplicaciones node, permitiendo auditar el archivo \textit{package.json} de dependencias de la misma.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.80\linewidth]
+	{figuras/emplazamiento-imagen.png}
+	\caption{Escaneo de vulnerabilidades en las dependencias de Node JS}
+	\label{nsp-check}
+\end{figure}
+
+Su utilización es simple, permitiendo incluso ignorar vulnerabilidades que puedan estar siendo tratadas en el momento del análisis y realizando consultas contra una base de datos de vulnerabilidades mantenida por Node Security Platform, que contiene información recopilada de múltiples fuentes (\gls{CVE} entre ellas). Basta con \textit{"nsp check"} para analizar las vulnerabilidades de la aplicación, recibiendo un resultado como el mostrado en la \autoref{nsp-check}.
+
+
+\section{Docker}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.80\linewidth]
+	{entorno/figuras/Docker.png}
+	\caption{Logotipo de Docker}
+	\label{docker-logo}
+\end{figure}
+
+Docker (\autoref{docker-logo}) es una herramienta de virtualización diseñada para aportar beneficios a desarrolladores, testers y administradores de sistemas, creando contenedores ligeros y portables para que las aplicaciones puedan ser ejecutadas en cualquier máquina, con sólo tener docker instalado e independientemente del \gls{SO} de la propia máquina que lo contenga\cite{garciaoterino2015}. Esta plataforma de código abierto hace uso de las funciones de aislamiento de recursos que provee el kernel de Linux para dar lugar a contenedores independientes, dentro de los cuales se ejecutará una única aplicación con sus respectivas dependencias, funcionando siempre con este único kernel, en lugar de virtualizar uno por cada contenedor o máquina virtual, como muestra la \autoref{docker-esquema}.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.80\linewidth]
+	{figuras/emplazamiento-imagen.png}
+	\caption{Pila de funcionamiento de docker}
+	\label{docker-esquema}
+\end{figure}
+
+Gracias al uso de docker dos desarrolladores no tendrán que, por ejemplo, preocuparse de la versión Java que cada uno tenga instalado en su propia máquina durante el desarrollo de la aplicación, ya que está podrá ser enviada de uno a otro en el interior de un contenedor, que funcionará de la misma manera en cualquiera de los dos entornos.
+
+Además, virtualizar con docker ofrece una serie de ventajas respecto a hacerlo con máquinas virtuales convencionales\cite{velazco2016}:
+
+\begin{itemize}
+	\item \textbf{Portabilidad.} Los contenedores son portables, por lo que pueden ser trasladados fácilmente a cualquier otro equipo con Docker sin tener que volver a configurar nada.
+	\item \textbf{Ligereza.} Al no virtualizar un sistema completo, sino solo lo necesario, el consumo de recursos es muy inferior.
+	\item \textbf{Autosuficiencia.} Docker se encarga de todo de organizarlo todo, por lo que los contenedores tan solo deben tener lo necesario para que la aplicación funcione.
+\end{itemize}
+
+Un sistema de contenedores Docker lo componen principalmente 5 elementos fundamentales:
+
+\begin{itemize}
+	\item \textbf{Demonio:} proceso principal de la plataforma.
+	\item \textbf{Cliente:} binario que constituye la interfaz al usuario y le permite interactuar con el Demonio.
+	\item \textbf{Imagen:} Plantilla utilizada para crear el contenedor de la aplicación que se va a ejecutar en su interior.
+	\item \textbf{Registros:} Directorios donde se almacenan las imágenes, tanto de acceso público como privado, similares a los de Linux, donde los usuarios publican sus propios contenedores de manera que aquellos otros usuarios que los necesiten puedan descargarlos directamente desde allí.
+	\item \textbf{Contenedores:} Donde se almacena todo lo necesario (librerías, dependencias, binarios de la aplicación, etc.) para que la aplicación pueda ejecutarse de forma aislada.
+\end{itemize}
+
+Actualmente existen multitud de empresas que utilizan a docker como sistema de contenedores en sus centros de datos (Spotify, eBay, PayPal, etc.) y cuenta con el apoyo de grandes compañías de internet como Amazon o Google, lo que permite que Docker se encuentre en un proceso continuo de crecimiento y mejora.
+
 
 \section{Clair y Clairctl}
 
-Clair (\autoref{clair-logo}) es un proyecto de código libre desarrollado por CoreOS
+Clair (\autoref{clair-logo}) es un proyecto de código libre desarrollado por CoreOS para el análisis estático de vulnerabilidades en contenedores de aplicaciones, que funciona de la siguiente manera\cite{clair2017}:
 
 \begin{figure}[htbp]
 	\centering
@@ -122,11 +176,22 @@ Clair (\autoref{clair-logo}) es un proyecto de código libre desarrollado por Co
 	\label{clair-logo}
 \end{figure}
 
+\begin{enumerate}
+	\item A intervalos regulares, Clair realiza una ingesta de metadatos de vulnerabilidad desde un conjunto configurado de fuentes (entre ellos \gls{CVE}) y los almacena en una base de datos PostgreSQL.
+	\item Un cliente configurado para utilizar la \gls{API} de Clair indexa y escanea sus imágenes de contenedores por capas,creando una lista de características presentes en la imagen y almacenándolas en la base de datos.
+	\item El cliente solicita a través de la \gls{API} a la base de datos las vulnerabilidades conocidas para para una imagen en particular, correlacionando las vulnerabilidades y características de la imagen, de manera que esta no requiere un escaneo completo para cada petición.
+	\item En caso de que se produzcan actualizaciones para los metadatos de vulnerabilidad, se enviará una notificación que alertará a los sistemas de que se ha producido un cambio, siendo escaneada de nuevo la imagen la próxima vez que sea solicitado un informe.
+\end{enumerate}
 
- (CoreOS)
+Por otro lado, Clairctl es uno de los clientes más utilizados para alcanzar la \gls{API} de Clair y se caracteriza por ser una herramienta ligera de interfaz de comando escrita con el lenguaje de programación desarrollado por Google, Go. Clairctl es capaz de hacer de puente entre registros\footnote{Un registro es un sistema de almacenamiento y distribución de imágenes de Docker, público o privado, que serán almacenadas en diferentes versiones, cada una con su correspondiente etiqueta.} de imágenes tales como Docker Hub, Docker Registry o Quay.io (registro de imágenes de CoreOS). La \autoref{clair-esquema} muestra el esquema resultado de utilizar ambas herramientas para el análisis estático de contenedores de aplicaciones.
 
-\section{Docker}
-
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.80\linewidth]
+	{figuras/emplazamiento-imagen.png}
+	\caption{Esquema de escaneo y detección de vulnerabilidades en imágenes Docker}
+	\label{clair-esquema}
+\end{figure}
 
 
 \section{Slack}
