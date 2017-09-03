@@ -5,8 +5,6 @@
 
 \lettrine[lraise=-0.1, lines=2, loversize=0.2]{E}{n} este primer apartado de la memoria se pretende realizar con el lector un recorrido a través del contexto que ha motivado el desarrollo del presente \gls{TFM} para el Máster en Seguridad de la Información y las Comunicaciones  de la Universidad de Sevilla, con el fin de aclarar el objetivo perseguido en su realización. Como conclusión al mismo, se definirá la estructura seguida durante la redacción, introduciendo cada uno de los apartados que se encontrarán a continuación. 
 
-
-
 \section{Contexto y motivación}
 
 El año 2017, para empresas englobadas en todo tipo de sectores, está siendo el año de la transformación digital. Estos procesos de transformación exigen distintas formas de trabajo, más ágiles y colaborativas, con las que poder aplicar nuevas tecnologías que permitan conseguir los objetivos del negocio, en entornos que afrontan grandes desafíos culturales, organizativos y operativos e incluso pueden llegar a tener que lidiar con sistemas tecnológicos antiguos y casi obsoletos\cite{expansion2017}. 
@@ -35,16 +33,17 @@ Es en el contexto planteado donde surge la idea del presente \gls{TFM}: aportar 
 
 \section{Objetivo}
 
-El objetivo del presente Trabajo Fin de Máster (\gls{TFM}) es desarrollar un entorno, basado en contenedores, que pueda ser incluido en el proceso de desarrollo e integración continua de la empresa y con el que poder realizar tareas periódicas programadas para analizar estáticamente las posibles vulnerabilidades (\gls{CVE}\TODO{TODO - ¿alguna más?}) contenidas en las dependencias de aplicaciones desarrolladas mediante los lenguajes de programación Ruby y NodeJS, además de analizar a nivel del SO vulnerabilidades presentes en las imágenes que van a constituir el contenedor que dará soporte a dichas aplicaciones.
+El objetivo del presente Trabajo Fin de Máster (\gls{TFM}) es desarrollar un entorno, basado en contenedores, que pueda ser incluido en el proceso de desarrollo e integración continua de la empresa y con el que poder realizar tareas periódicas programadas para analizar estáticamente las posibles vulnerabilidades (\gls{CVE} entre otras) contenidas en las dependencias de aplicaciones desarrolladas mediante los lenguajes de programación Ruby y NodeJS, además de analizar a nivel del \gls{SO} vulnerabilidades presentes en las imágenes que van a constituir el contenedor que dará soporte a dichas aplicaciones.
 
-Como medio para alcanzar el objetivo planteado se va a hacer uso de una serie de aplicaciones y herramientas, entres las que cabe destacar\TODO{(TODO - no me gusta esta última frase)}, que serán desarrolladas en el apartado \ref{chp-03}:
+Como medio para alcanzar el objetivo planteado se va a hacer uso de una serie de aplicaciones y herramientas, entres las que cabe destacar las siguientes, que serán desarrolladas en los próximos apartados:
 
 \begin{itemize}
 	\item GitHub\cite{github2017}: Plataforma de desarrollo colaborativo y control de versiones de \gls{SW} donde almacenar, entre otras, el código desarrollado y que será analizadp.
-	\item Jenkins\cite{jenkins2017}: Software de integración continua (\gls{CI}) con el que automatizar los trabajos periódicos de análisis estático a realizar.
+	\item Jenkins\cite{jenkins2017}: Software de Integración Continua (\gls{IC}) con el que automatizar los trabajos periódicos de análisis estático a realizar.
 	\item Docker\cite{docker2017}: Proyecto de código abierto que automatiza el despliegue de aplicaciones dentro de contenedores de software, con el que desplegar los distintos elementos requeridos.
 \end{itemize}
 
+El trabajo aquí presentado no tiene como objetivo innovar en la tecnología existente, sino por contra valerse de esta para aportar al futuro usuario una herramienta intuitiva y de fácil aplicación, resultado de la agrupación de otras utilidades, con la que poder desplegar con el mínimo esfuerzo el entorno aquí recopilado. 
 
 \section{Estructura de la memoria}
 
@@ -53,20 +52,12 @@ Para facilitar la lectura de la memoria actual, se cree conveniente presentar un
 
 En el apartado actual, Introducción, se presenta el \gls{TFM} que se va a realizar, aclarando el objetivo perseguido, el contexto en que surge y los aspectos que motivaron su realización.
 
-El apartado \ref{chp-02}, Descripción de la técnica, se pretende dar a conocer, de manera objetiva, las características de la realidad representada, con rasgos tales como elementos que la componen, funcionalidad, utilidad, etc. En concreto, el apartado comienza describiendo el 
+El apartado \ref{chp-02}, Descripción de la técnica, se pretende dar a conocer, de manera objetiva, las características de la realidad representada, con rasgos tales como elementos que la componen, utilidad, etc. En concreto, el apartado comienza describiendo repasando el panorama actual en las empresas de software. A continuación se ...
 
-El apartado 3, Entorno de trabajo, está dedicado a conocer las herramientas utilizadas para poder llevar a cabo el desarrollo y la implementación 
+El apartado \ref{chp-03}, Entorno de trabajo, está dedicado a conocer las herramientas utilizadas para poder llevar a cabo el desarrollo y la implementación de la parte técnica de este \gls{TFM}.
 
-El apartado 4, titulado Desarrollo de la aplicación, es el apartado principal de la memoria. En él, se detalla el proceso a seguir durante el desarrollo e implementación de la """"""""""""""" presentada en el proyecto, comenzando por los Primeros pasos a seguir, hasta llegar a presentar el Resultado final obtenido.
+El apartado \ref{chp-04}, titulado Desarrollo de la aplicación, es el apartado principal de la memoria. En él, se detalla el proceso a seguir durante el desarrollo e implementación de los objetivos presentados en este proyecto, comenzando preparación del entorno que se va a utilizar en el desarrollo, hasta llegar a presentar el Resultado final obtenido.
 
-Por último, el apartado 5, está dedicado a las Conclusiones y evaluaciones surgidas del proyecto, los objetivos alcanzados y las líneas futuras de trabajo surgidas durante la realización de éste.
-
-"""""""""""" PRESCINDIBLE """""""""""
-
-Además, se advierte al lector que la mayor parte de herramientas y documentación utilizada para la realización del PFC se encuentran redactadas en inglés, incluyendo términos que en el ámbito del desarrollo de aplicaciones no poseen traducción literal al español. Es por esto, que en la redacción de la memoria actual no se utiliza traducción, ni letras cursivas, ni comillas para referir a dichos términos.
-
-"""""""""""""""""""""""""""""""""""""
-
-\TODO{TODO - Dejar claro que este proyecto no busca innovar en ninguno de sus apartado, el objetivo perseguido será recopilar herramientas y poder disponer de ellas y ejecutarlas en un entorno "autodeplegable"}
+Por último, el apartado \ref{chp-05}, está dedicado a las Conclusiones y evaluaciones surgidas del proyecto, los objetivos alcanzados y las líneas futuras de trabajo surgidas durante la realización de éste.
 
 \endinput
