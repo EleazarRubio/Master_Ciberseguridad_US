@@ -5,7 +5,7 @@
 
 \lettrine[lraise=-0.1, lines=2, loversize=0.2]{E}{l} apartado actual está dedicado a comprender el proceso seguido durante el desarrollo de la solución realizada. Comenzando con una introducción que sitúe al lector en condiciones que le permitan reproducir el proceso presentado y los primeros pasos a seguir en la preparación del entorno, desplegando los sistemas que componen dicha solución para así continuar automatizando el proceso en vistas a un uso prolongado en el tiempo. Por último, se evaluará la solución obtenida en un proceso de verificación de la solución mostrando el resultado final obtenido.
 
-\section{Preparación del entorno de trabajo}
+\section{Preparación del entorno de trabajo}\label{preparacion}
 
 \subsection{Docker}
 Como ya ha quedado reflejado en apartados anteriores, las nuevas habilidades proporcionadas por la virtualización mediante contenedores de aplicación permiten desplegar el sistema compuesto de múltiples contenedores con independencia al \gls{SO} en el que estos se ejecuten, siendo el único requisito indispensable contar con el motor de virtualización de docker instalado y ejecutándose en la máquina. Por esto, toda solución desarrollada a partir de virtualización de contenedores comenzará con la instalación de docker en su sistema .
@@ -379,9 +379,15 @@ Tras aplicar la instalación del plugin, y como muestra la \autoref{jenkins_09},
 	\label{jenkins_10}
 \end{figure}
 
-\section{Trabajando con Jenkins}
+\section{Trabajando con Jenkins}\label{trabajando_jenkins}
 
-JENKINS JOBS
+En la sección actual se va a utilizar el contenido empleado en los apartados de la \autoref{preparacion} para mostrar al lector la creación de tareas o trabajos en la plataforma de \gls{IC} Jenkins, con el fin de automatizar el proceso de análisis de las dependencias de código de aplicaciones escritas mediante los lenguajes de programación Ruby y Node.js, asi como el análisis de las posibles vulnerabilidades que pudieran mantener los contenedores de Docker utilizados por la compañía.
+
+\subsection{Análisis de imágenes Docker}
+
+\subsection{Análisis de dependencias Ruby}
+
+\subsection{Análisis de de dependencias Node.js}
 
 \section{Evaluación de la solución}
 
