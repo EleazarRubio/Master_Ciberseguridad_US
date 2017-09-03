@@ -156,8 +156,8 @@ Un sistema de contenedores Docker lo componen principalmente 5 elementos fundame
 \begin{itemize}
 	\item \textbf{Demonio:} proceso principal de la plataforma.
 	\item \textbf{Cliente:} binario que constituye la interfaz al usuario y le permite interactuar con el Demonio.
-	\item \textbf{Imagen:} Plantilla utilizada para crear el contenedor de la aplicación que se va a ejecutar en su interior.
-	\item \textbf{Registros:} Directorios donde se almacenan las imágenes, tanto de acceso público como privado, similares a los de Linux, donde los usuarios publican sus propios contenedores de manera que aquellos otros usuarios que los necesiten puedan descargarlos directamente desde allí.
+	\item \textbf{Imagen:} Plantilla utilizada para crear el contenedor de la aplicación que se va a ejecutar en su interior. Dicha plantilla recibe el nombre por defecto de \textit{Dockerfile}.
+	\item \textbf{Registros:} Directorios donde se almacenan las imágenes, tanto de acceso público como privado y similares a los utilizados por Linux, donde los usuarios publican sus propios contenedores de manera que aquellos otros usuarios que los necesiten puedan descargarlos directamente desde allí.
 	\item \textbf{Contenedores:} Donde se almacena todo lo necesario (librerías, dependencias, binarios de la aplicación, etc.) para que la aplicación pueda ejecutarse de forma aislada.
 \end{itemize}
 
@@ -183,7 +183,7 @@ Clair (\autoref{clair-logo}) es un proyecto de código libre desarrollado por Co
 	\item En caso de que se produzcan actualizaciones para los metadatos de vulnerabilidad, se enviará una notificación que alertará a los sistemas de que se ha producido un cambio, siendo escaneada de nuevo la imagen la próxima vez que sea solicitado un informe.
 \end{enumerate}
 
-Por otro lado, Clairctl es uno de los clientes más utilizados para alcanzar la \gls{API} de Clair y se caracteriza por ser una herramienta ligera de interfaz de comando escrita con el lenguaje de programación desarrollado por Google, Go. Clairctl es capaz de hacer de puente entre registros\footnote{Un registro es un sistema de almacenamiento y distribución de imágenes de Docker, público o privado, que serán almacenadas en diferentes versiones, cada una con su correspondiente etiqueta.} de imágenes tales como Docker Hub, Docker Registry o Quay.io (registro de imágenes de CoreOS). La \autoref{clair-esquema} muestra el esquema resultado de utilizar ambas herramientas para el análisis estático de contenedores de aplicaciones.
+Por otro lado, Clairctl es uno de los clientes más utilizados para alcanzar la \gls{API} de Clair y se caracteriza por ser una herramienta ligera de interfaz de comandos y escrita en el lenguaje de programación desarrollado por Google, Go. Clairctl es capaz de hacer de puente entre registros de imágenes tales como Docker Hub, Docker Registry o Quay.io (registro de imágenes de CoreOS). La \autoref{clair-esquema} muestra el esquema resultado de utilizar ambas herramientas para el análisis estático de contenedores de aplicaciones.
 
 \begin{figure}[htbp]
 	\centering
@@ -193,14 +193,9 @@ Por otro lado, Clairctl es uno de los clientes más utilizados para alcanzar la 
 	\label{clair-esquema}
 \end{figure}
 
+\section{Jenkins \gls{CI}}
 
-\section{Slack}
-
-
-
-\section{Jenkins}
-
-Jenkins (\autoref{jenkins-logo}) es una herramienta autónoma de código abierto que puede utilizarse para automatizar todo tipo de tareas, como la construcción, prueba y despliegue de software. Jenkins puede ser instalado a través de paquetes de sistemas nativos, Docker, o incluso puede ser ejecutado de manera independiente en cualquier máquina con el entorno de ejecución de Java instalado\cite{jenkins2017}.
+Jenkins \gls{CI} (\autoref{jenkins-logo}) es una herramienta autónoma de código abierto que puede utilizarse para automatizar todo tipo de tareas, como la construcción, prueba y despliegue de software. Jenkins puede ser instalado a través de paquetes de sistemas nativos, Docker, o incluso ser ejecutado de manera independiente en cualquier máquina con el entorno de ejecución de Java instalado\cite{jenkins2017}.
 
 
 \begin{figure}[htbp]
@@ -229,7 +224,22 @@ Jenkins posee, entre otras, las siguientes ventajas:
 	\item It can be used to Publish results and send email notifications.
 \end{itemize}
 
-
 \TODO{Pipeline - A user-defined model of a continuous delivery pipeline, for more read the Pipeline chapter in this handbook.\\Debo poner también la imagen de una pipeline de trabajo con verdes y rojos.}
+
+\section{Slack}
+
+Slack (\autoref{slack-logo}) es una herramienta de mensajería en tiempo real diseñada para usarla en grupo, facilitando la gestión de los propios grupos de trabajo dentro del entorno de una empresa y centralizando la comunicación interna a la misma\cite{santamaria2015}. Además, permite la creación de grupos de trabajo con un número ilimitado de miembros, a la vez que es posible establecer canales de comunicación públicos, conversaciones privadas y compartir ficheros.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.80\linewidth]
+	{entorno/figuras/Slack.png}
+	\caption{Slack}
+	\label{slack-logo}
+\end{figure}
+
+Por otro lado, Slack permite a sus usuarios trabajar con otros servicios basados en la web, amplificando aún más el trabajo colaborativo y proveyendo integración con múltiples herramientas de uso habitual: Dropbox, Trello, Google Drive, GitHub y Jenkins entre otras.
+
+\TODO{TODO - ¿Cierre al apartado?}
 
 \endinput

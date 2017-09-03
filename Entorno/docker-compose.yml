@@ -1,7 +1,7 @@
 version: '2'
 services:
   postgres:
-    container_name: clair_postgres
+    container_name: c_postgres
     image: postgres:9.6
     restart: unless-stopped
     volumes:
@@ -26,7 +26,7 @@ services:
 
   clairctl:
     build: ./clairctl
-    container_name: clair_clairctl
+    container_name: clairctl
     command: [echo, Hello from clairctl container]
 
   ruby-tool:
