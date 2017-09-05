@@ -62,44 +62,32 @@ Con esto, un proceso de implementación de seguridad en el proceso \gls{SDLC} ga
 
 \section{Análisis estático}
 
+Análisis estático, o también conocido por análisis estático de código, es un método de depuración de aplicaciones que se basa en exámenes al código cuando éste no se está ejecutando. El proceso de análisis estático es realizado con la ayuda de herramientas automatizadas y asiste a los desarrolladores aportando variada información valiosa mediante el escrutinio del código, utilizando mecanismos y herramientas (por ejemplo revisión de impresiones y campos de formularios) que podrían escapar al ojo humano. El análisis realizado por un humano recibe el nombre de comprensión de código\cite{rouse2017}.
 
-\TODO{static analysis (static code analysis)\\Static analysis, also called static code analysis, is a method of computer program debugging that is done by examining the code without executing the program. The process provides an understanding of the code structure, and can help to ensure that the code adheres to industry standards. Automated tools can assist programmers and developers in carrying out static analysis. The process of scrutinizing code by visual inspection alone (by looking at a printout, for example), without the assistance of automated tools, is sometimes called program understanding or program comprehension.\\The principal advantageof  static analysis is the fact that it can reveal errors that do not manifest themselves until a disaster occurs weeks, months or years after release. Nevertheless, static analysis is only a first step in a comprehensive software quality-control regime. After static analysis has been done, dynamic analysis is often performed in an effort to uncover subtle defects or vulnerabilities. In computer terminology, static means fixed, while dynamic means capable of action and/or change. Dynamic analysis involves the testing and evaluation of a program based on execution. Static and dynamic analysis, considered together, are sometimes referred to as glass-box testing.}
+\TODO{Un último párrafo donde enlazar el análisis estático con que se va a realizar de las dependencias del código y con contenedores de imágenes}
 
-\cite{rouse2017}
-
-Análisis estático de software es un tipo de análisis de software que se realiza sin ejecutar el programa (el análisis realizado sobre los programas en ejecución se conoce como análisis dinámico de software).1​ En la mayoría de los casos, el análisis se realiza en alguna versión del código fuente y en otros casos se realiza en el código objeto. El término se aplica generalmente a los análisis realizados por una herramienta automática, el análisis realizado por un humano es llamado comprensión de programas (o entendimiento de programas) como también revisión de código.
-
-
-
-\subsection{Ruby y NodeJS}
-
-\TODO{YAML no e stá por ningún lado.}
-
-Quizás a estas alturas no sea necesario hablar de estos lenguajes de programación... lo que si que daré será algunos datos que confirmen un poco por qué he empezado con estos...
-
-\TODO{Breve presentación a la importancia de estos lenguajes de programación, comentando que lo que se ha hecho aquí es extensible a otros lenguajes, con otras herramientas similares.\\Concepto dependencias de código.}
 
 Bundler is the de facto way of managing dependencies. It provides, among other things, a clear way of specifying required libraries and their versions, by keeping track of everything for you through Gemfile and (for applications) Gemfile.lock. Exactly the sort of information you’d need when checking for security vulnerabilities.
 
-\subsection{De las dependencias del código}
+\section{Virtualización basada en contenedores}
 
-\TODO{¿Qué es y cómo funciona?}
+La nube es cada vez más grande, más potente y posee más usuarios. Al mismo tiempo, permite la ejecución de aplicaciones más y más potentes, que requieren garantizar el correcto funcionamiento de esta, actualmente y en el futuro.
 
-\subsection{De contenedores de imágenes}
+Por este motivo, es primordial utilizar ua plataforma que los recursos en la medida de lo posible a la vez que permita la escalabilidad, con el fin de poder ampliar sus características de forma sencilla en caso de ser necesario.
 
-\TODO{Quizás no son necesarios los subapartados... y simplemente baste con explicar elconcepto de análisis estático de algo genérico.}
+Al hablar de nube se está hablando de virtualización. Ejecutar un \gls{SO} virtual para cada instancia de una aplicación es un proceso muy pesado y lento, es de este problema donde surge el concepto de virtualización basada en contenedores, también conocida como virtualización a nivel de sistema operativo.
 
-https://www.linuxadictos.com/docker-i-que-es-conociendo-la-ballena.html
+Un contenedor no es más que una nueva forma de optimizar los recursos de los que dispone una plataforma creando pequeños espacios virtuales de as aplicaciones necesarias, en las que unicamente será necesario cargar el núcleo de la aplicación y las dependencias de esta, pero funcionando siempre sobre un único kernel, o sitema operativo\cite{velazco2016}. La \autoref{contenedores} muestra las diferencias en el modelo de capas de un sistema de virtualización y tradicional y uno basado en contenedores.
 
-http://www.javiergarzas.com/2015/07/que-es-docker-sencillo.html
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.8\linewidth]
+	{tecnica/figuras/Contenedores.png}
+	\caption{Sistemas de vitualización}
+	\label{contenedores}
+\end{figure}
 
-https://www.redeszone.net/2016/02/24/docker-funciona-la-virtualizacion-contenedores/
 
-
-La nube es cada vez más grande, más potente, cuenta con más usuarios que hacen uso de ella al mismo tiempo y, además, permite la ejecución de aplicaciones cada vez más potentes, por lo que, para garantizar el correcto funcionamiento de esta, tanto en el presente como en el futuro, es necesario utilizar una plataforma que optimice los recursos lo mejor posible y, al mismo tiempo, sea lo más escalable posible con el fin de poder ampliar sus características de forma sencilla cuando sea necesario.
-
-La nube es sinónimo de virtualización. Ejecutar un sistema operativo virtual por cada instancia de una aplicación es un proceso muy pesado y poco optimizado, a la vez que lento. Por ello, la comunidad Linux ha trabajado en el concepto de contenedores, una nueva forma de optimizar recursos creando pequeños espacios virtuales de las aplicaciones necesarias cargando solo el núcleo de la aplicación y las dependencias, pero funcionando siempre sobre un único kernel, o sistema operativo. (Esquema de esta WEB)
-
-\section{Trabajos relacionados}
+\TODO{EN EL APARTADO 3 DIGO QUE EN EL APARTADO 2 EXPLIQUE LAS DEPENDENCIAS Y DEMAS... ASI QUE HAY QUE EXPLICARLAS}
 
 \endinput
