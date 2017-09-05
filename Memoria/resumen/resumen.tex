@@ -12,18 +12,18 @@ Este nuevo modo de entender el mundo del desarrollo de \gls{SW} posee una serie 
 \begin{itemize}
 	\item Plataformas de desarrollo colaborativo y control de versiones de \gls{SW} (por ejemplo \href{https://github.com/}{GitHub}), donde se almacena el código desarrollado por las mismas.
 	\item Diferentes entornos o infraestructuras de trabajo para los desarrolladores, que van a permitir un desarrollo y despliegue continuo para las mejoras del producto: entornos de desarrollo, entornos de seguro de calidad o \gls{QA}, preproducción, producción o entorno final, etc.
-	\item Software de integración continua, en inglés \gls{CI}, con las que automatizar los trabajos de despliegue de software.
+	\item Fundamentos de \gls{IC} y \gls{DC}.
 	\item Plataformas basadas en el despliegue de contenedores (generalmente \href{https://www.docker.com/}{Docker}) que encapsulan los distintos elementos que componen el producto final y optimizan los recursos utilizados en las máquinas que los contienen, en su mayoría subcontratadas a terceras compañías (\href{https://aws.amazon.com/es/}{Amazon Web Services}, \href{https://azure.microsoft.com/es-es/}{Microsoft Azure}, etc.).
 \end{itemize}
 
-En el presenta \gls{TFM} se pretende aportar e introducir al proceso comentado (y haciendo uso de las herramientas que este provee) una serie de análisis de seguridad que, ejecutados periódicamente, provean a la compañía de informes con los que poder identificar los siguientes problemas de seguridad durante el desarrollo de sus aplicaciones, siempre en continua integración con la línea de trabajo:
+El presente \gls{TFM} pretende exponer un proceso automatizado de análisis estático de aplicaciones en varios niveles. El resultado de la ejecución periódica de estos procedimientos genera informes de seguridad que podrán ser utilizados para prevenir amenazas durante las fases más tempranas del \gls{CDS} del software, advirtiendo de aspectos tales como:
 
 \begin{enumerate}
 	\item Si la aplicación creada tiene Vulnerabilidades (\href{https://cve.mitre.org/}{\gls{CVE}}) en las librerías de dependencias de código utilizadas.
 	\item Si la imagen que se va a emplear para desplegar el contenedor de dicho \gls{SW} contiene vulnerabilidades conocidas al nivel de \gls{SO}.
 \end{enumerate}
 
-\TODO{TODO - Cambiar enlaces por referencias bibliográficas.}
+\TODO{TODO - Cambiar enlaces por referencias bibliográficas. Deployment and orchestration of immutable application images using containers (mostly Docker) that increases the portability, reusability and scalability of the application. These applications use Cloud Providers as the underlaying platform such as AWS, Azure or GCE among others. TRADUCIRLA EN EL PUNTO}
 
 \chapter*{Abstract}
 \pagestyle{especial}
@@ -33,16 +33,16 @@ En el presenta \gls{TFM} se pretende aportar e introducir al proceso comentado (
 
 \lettrine[lraise=-0.1, lines=2, loversize=0.2]{L}{ately} inside Software as a Service (\gls{SaaS}) companies, the agile methodology and \gls{DevOps} philosophy concepts are taking a fundamental role for the development of them\cite{consultorit2017}. According to a recent global survey by CA Technologies, more than 75 percent of Spanish organizations agree that DevOps and agile methodologies are crucial to the success of digital transformation\cite{catechnologies2017}.
 
-This new way of understanding the world of \gls{SW} development has a various common elements, each of them implemented with well known and popular tools for the companies that put it into practice:
+This new way of understanding the world of \gls{SW} development has various common elements, each of them implemented with well known and popular tools for the companies that put it into practice:
 
 \begin{itemize}
 \item Collaborative development platforms and \gls{SW} version control systems (for example \href{https://github.com/}{GitHub}), where the code developed is keeped.
 \item Different environments and infrastructures for developers, which will allow to continuous development and deployment for product enhancements: development environments, Quality Assurance \gls{QA} environments, pre-production, production or final environment, etc.
-\item Continuous integration \gls{CI} software, with which to automate the software deployment.
-\item Platforms based on container deployment (usually \href{https://www.docker.com/}{Docker}) that encapsulate elements that make up the final product and optimize the resources used in the machines that contain them, mostly subcontracted to third parties (\href{https://aws.amazon.com/es/}{Amazon Web Services}, \href{https://azure.microsoft.com/es-es/}{Microsoft Azure}, etc.).
+\item \gls{CI} and \gls{CD} principles.
+\item Deployment and orchestration of immutable application images using containers (mostly Docker) that increases the portability, reusability and scalability of the application. These applications use Cloud Providers as the underlaying platform such as AWS, Azure or GCE among others.
 \end{itemize}
 
-In the present master's thesis is intended to contribute and introduce to the process discussed (making use of the tools it provides), security analyzes that periodically executed provide the company with reports with which Identify the following security issues along of the process of development applications, always in continuous integration with the company pipeline:
+This thesis tries to expose a procedure to automatically implement an application static analysis pipeline at several layers. The outcome of these periodically executed pipelines provide the company security reports that can be used to prevent threats during the earliest stages of the \gls{SDLC}:
 
 \begin{enumerate}
 \item If the application created has Vulnerabilities (\href{https://cve.mitre.org/}{\gls{CVE}}) in the code dependencies used.
