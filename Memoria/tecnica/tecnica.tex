@@ -63,10 +63,11 @@ Con esto, un proceso de implementación de seguridad en el proceso \gls{SDLC} ga
 
 Análisis estático, o también conocido por análisis estático de código, es un método de depuración de aplicaciones que se basa en exámenes al código cuando éste no se está ejecutando. El proceso de análisis estático es realizado con la ayuda de herramientas automatizadas y asiste a los desarrolladores aportando valiosa información mediante el escrutinio del código, utilizando mecanismos y herramientas (por ejemplo revisión de impresiones y campos de formularios) que podrían escapar al ojo humano\footnote{El análisis realizado por un humano recibe el nombre de comprensión de código}\cite{rouse2017}.
 
-\TODO{Un último párrafo donde enlazar el análisis estático con que se va a realizar de las dependencias del código y con contenedores de imágenes}
+\section{Dependencias de software}\label{dependencias}
 
+En el campo de la programación y el software una dependencia de código o \gls{SW} es una aplicación o biblioteca de código requerida por otro programa para poder funcionar de manera correcta\cite{wiki2017}.
 
-Bundler is the de facto way of managing dependencies. It provides, among other things, a clear way of specifying required libraries and their versions, by keeping track of everything for you through Gemfile and (for applications) Gemfile.lock. Exactly the sort of information you’d need when checking for security vulnerabilities.
+La lista de dependencias de \gls{SW} que una aplicación ruby o una aplicación escrita con el lenguaje de programación node van a requerir se almacenan en archivos específicos llamados Gemfile.lock y package.json, respectivamente. 
 
 \section{Virtualización basada en contenedores}
 
@@ -85,8 +86,5 @@ Un contenedor no es más que una nueva forma de optimizar los recursos de los qu
 	\caption{Sistemas de vitualización}
 	\label{contenedores}
 \end{figure}
-
-
-\TODO{EN EL APARTADO 3 DIGO QUE EN EL APARTADO 2 EXPLIQUE LAS DEPENDENCIAS Y DEMAS... ASI QUE HAY QUE EXPLICARLAS}
 
 \endinput
