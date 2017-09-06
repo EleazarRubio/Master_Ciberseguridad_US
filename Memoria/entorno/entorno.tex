@@ -113,11 +113,10 @@ Nsp es la principal herramienta de interfaz de línea de comandos de Node Securi
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.80\linewidth]
-	{figuras/emplazamiento-imagen.png}
+	{entorno/figuras/nsp.png}
 	\caption{Escaneo de vulnerabilidades en las dependencias de Node JS}
 	\label{nsp-check}
 \end{figure}
-\todo{La pantalla del terminal}
 
 Su utilización es simple, permitiendo incluso ignorar vulnerabilidades que puedan estar siendo tratadas en el momento del análisis y realizando consultas contra una base de datos de vulnerabilidades mantenida por Node Security Platform, que contiene información recopilada de múltiples fuentes (por ejemplo \gls{CVE}). Basta con \textit{"nsp check"} para analizar las vulnerabilidades de la aplicación, recibiendo un resultado como el mostrado en la \autoref{nsp-check}.
 
@@ -132,16 +131,9 @@ Su utilización es simple, permitiendo incluso ignorar vulnerabilidades que pued
 	\label{docker-logo}
 \end{figure}
 
-Docker (\autoref{docker-logo}) es una herramienta de virtualización diseñada para aportar beneficios a desarrolladores, testers y administradores de sistemas, creando contenedores ligeros y portables para que las aplicaciones puedan ser ejecutadas en cualquier máquina, con sólo tener docker instalado e independientemente del \gls{SO} de la propia máquina que lo contenga\cite{garciaoterino2015}. Esta plataforma de código abierto hace uso de las funciones de aislamiento de recursos que provee el kernel de Linux para dar lugar a contenedores independientes, dentro de los cuales se ejecutará una única aplicación con sus respectivas dependencias, funcionando siempre con este único kernel, en lugar de virtualizar uno por cada contenedor o máquina virtual, como muestra la \autoref{docker-esquema}.
+Docker (\autoref{docker-logo}) es una herramienta de virtualización diseñada para aportar beneficios a desarrolladores, testers y administradores de sistemas, creando contenedores ligeros y portables para que las aplicaciones puedan ser ejecutadas en cualquier máquina, con sólo tener docker instalado e independientemente del \gls{SO} de la propia máquina que lo contenga\cite{garciaoterino2015}. Esta plataforma de código abierto hace uso de las funciones de aislamiento de recursos que provee el kernel de Linux para dar lugar a contenedores independientes, dentro de los cuales se ejecutará una única aplicación con sus respectivas dependencias, funcionando siempre con este único kernel, en lugar de virtualizar uno por cada contenedor o máquina virtual.
 
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width=0.80\linewidth]
-	{figuras/emplazamiento-imagen.png}
-	\caption{Pila de funcionamiento de docker}
-	\label{docker-esquema}
-\end{figure}
-\todo{AQUI HABRIA QUE HACER LA REFERENCIA A LA FIGURA DEL APARTADO ANTERIOR O BUSCAR OTRA}
+\TODO{La tecnología Docker fue creada al principio por encima de la tecnología LXC (que la mayoría de las personas relacionan con los contenedores Linux "tradicionales"), aunque se ha alejado de esa dependencia. LXC fue útil como virtualización ligera, pero no contaba con un gran desarrollador o una experiencia de usuario. La tecnología Docker proporciona más que la capacidad de ejecutar contenedores, también facilita el proceso de creación y diseño de contenedores mediante el envío de imágenes y versionado de imágenes (entre otras cosas) Añadir IMAGEN DOCKER-ESQUEMA}
 
 Gracias al uso de docker dos desarrolladores no tendrán que, por ejemplo, preocuparse de la versión Java que cada uno tenga instalado en su propia máquina durante el desarrollo de la aplicación, ya que está podrá ser enviada de uno a otro en el interior de un contenedor, que funcionará de la misma manera en cualquiera de los dos entornos.
 
