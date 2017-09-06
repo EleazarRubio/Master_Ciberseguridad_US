@@ -3,7 +3,7 @@
 \chapter{Entorno de trabajo}\label{chp-03}
 \epigraph{Technology is nothing. What's important is that you have a faith in people, that they're basically good and smart, and if you give them tools, they'll do wonderful things with them.}{Steve Jobs, 1994\\Businessman}
 
-\lettrine[lraise=-0.1, lines=2, loversize=0.2]{A}{ntes} de comenzar el proceso de desarrollo de la aplicación es necesario preparar un entorno adecuado de trabajo, es decir, un conjunto de herramientas hardware y software que permitan llevar a cabo el proyecto con la mayor comodidad y precisión posible.
+\lettrine[lraise=-0.1, lines=2, loversize=0.2]{A}{ntes} de comenzar el proceso de desarrollo de la parte técnica de la memoria es necesario preparar un entorno adecuado de trabajo, es decir, un conjunto de herramientas hardware y software que permitan llevar a cabo el proyecto con la mayor comodidad y precisión posible.
 
 La correcta elección de un entorno de trabajo adecuado es fundamental a la hora de abordar cualquier tipo de proyecto, ya que el éxito o fracaso, o al menos la eficiencia del proceso de desarrollo del mismo, va a depender en gran medida de dicho entorno utilizado.
 El apartado actual presenta el entorno de trabajo utilizado para la realización de este \gls{TFM}.
@@ -25,7 +25,7 @@ A continuación se muestran algunas de las características que han llevado a Gi
 \begin{itemize}
 	\item Permite versionar el código, es decir, guardar en determinado momento los cambios realizados sobre un archivo o conjunto de archivos con la oportunidad de tener acceso al historial de cambios al completo, bien para regresar a alguna de las versiones anteriores o bien para poder realizar comparaciones entre ellas.
 	\item Gracias a la gran cantidad de repositorios de \gls{SW} públicos que alberga, es posible leer, estudiar y aprender de el código creado por miles de desarrolladores en el mundo, permitiendo incluso la oportunidad de adaptarlos a las necesidades propias de cada desarrollador, sin alterar el original y realizando una copia o fork\footnote{Copia exacta en crudo del repositorio original que podrá ser utilizada como un repositorio git cualquiera} de este.
-	\item Tras haber realizado un fork de un proyecto y haber realizado algunos ajuste, introducido alguna mejora o arreglado algún problema que este pudiera contener, es posible integrar los cambios realizados al proyecto original (previa supervisión de su propietario, administrador o alguno de sus colaboradores), por lo que un repositorio puede llegar a ser construido mediante la contribución una gran comunidad de desarrolladores.
+	\item Tras haber realizado un fork de un proyecto y haber realizado algunos ajuste, introducido alguna mejora o arreglado algún problema que pudiera contener, es posible integrar los cambios realizados al proyecto original (previa supervisión de su propietario, administrador o alguno de sus colaboradores), por lo que un repositorio puede llegar a ser construido mediante la contribución de una gran comunidad de desarrolladores.
 	\item GitHub posee un sistema propio de notificaciones con el que poder estar informado de lo que ocurre en torno a un repositorio concreto, ya sea privado a la compañía o público a la comunidad.
 	\item GitHub trae incorporado un visor de código, mediante el cual (y a través del navegador) es posible consultar el contenido de un archivo determinado, con la sintaxis correspondiente al lenguaje utilizado y sin necesidad de descargar una copia del mismo.
 	\item Cada repositorio de \gls{SW} albergado en GitHub cuenta con su propio seguimiento de incidencias, con un elaborado sistema de tickets, de manera tal que cualquier colaborador (o usuario en general) pueda reportar algún problema encontrado en la utilización el código o pueda simplemente sugerir nuevas características para que sean implementadas.
@@ -38,18 +38,18 @@ A continuación se muestran algunas de las características que han llevado a Gi
 
 \section{Bundler-audit}
 
-Como ya fue comentado en el apartado \ref{chp-02} cada aplicación tiene sus dependencia, y estas a su vez pueden contener vulnerabilidades de seguridad. Encontrar las vulnerabilidades de seguridad que presenta una aplicación es una tarea necesaria y tediosa, que de ser obviada no impedirá que la aplicación generada siga siendo ejecutada como si todo estuviera funcionando en perfectas condiciones, pero que ocultará agujeros en la aplicación que podrán ser utilizados en diversa manera por algún usuario malintencionado.
+Como ya fue comentado en el apartado \ref{chp-02} \TODO{DONDE?} cada aplicación tiene sus dependencia, y estas a su vez pueden contener vulnerabilidades de seguridad. Encontrar las vulnerabilidades de seguridad que presenta una aplicación es una tarea necesaria y tediosa, que de ser obviada no impedirá que la aplicación generada siga siendo ejecutada como si todo estuviera funcionando en perfectas condiciones, pero que ocultará agujeros en la aplicación que podrán ser utilizados en diversa manera por algún usuario malintencionado.
 
 Para cualquier aplicación escrita con Ruby y en ausencia de alguna herramienta automatizada de análisis de vulnerabilidades, el desarrollador del código deberá estar suscrito a cada lista de correo relacionada con anuncios de seguridad de dependencias y realizar un seguimiento exclusivo de vulnerabilidades y actualizaciones de seguridad de cada una de las dependencias incluidas en la aplicación, para cada aplicación en la que participe\cite{prescott2015}.
 
-Por el contrario, todo este proceso puede ser automatizado en Ruby gracias a bundler-audit\cite{bundleaudit2017}del grupo de colaboradores Rubysec, un verificador a nivel de parche para Bundler con las siguientes características:
+Por el contrario, todo este proceso puede ser automatizado en Ruby gracias a bundler-audit\cite{bundleaudit2017}, del grupo de colaboradores Rubysec, un verificador a nivel de parche para Bundler\footnote{O explico en el apartado 2 qué es Bundler o lo hago aquí. 1 frase} con las siguientes características:
 
 \begin{itemize}
 	\item bundler-audit analiza las vulnerabilidades en las versiones de las gemas contenidas en el archivo de dependencias \textit{Gemfile.lock} de la aplicación.
 	\item Analiza las fuentes de dependencias que puedan ser inseguras (http://).
-	\item Permite especificar avisos de seguridad que serán ignorados en el análisis, bien por ser un riesgo asumido por el desarrollador, una vulnerabilidad ya conocida y en la que se está actualmente trabajando o cualquier otro motivo.
+	\item Permite especificar avisos de seguridad que serán ignorados en el análisis\todo{iNCLUIR ESTO EN LAS PRUEBAS}, bien por ser un riesgo asumido por el desarrollador, una vulnerabilidad ya conocida y en la que se está actualmente trabajando o cualquier otro motivo.
 	\item No requiere de conexión a internet para cada ejecución que se realice del análisis.
-	\item Funcionando cruzando la información de dependencias recogidas del fichero \textit{Gemfile.lock} con una lista de vulnerabilidades conocidas\cite{advisorydb2017}, basada en información pública existente en bases de datos como \gls{CVE}.
+	\item Funciona cruzando la información de dependencias recogidas del fichero \textit{Gemfile.lock} con una lista de vulnerabilidades conocidas\cite{advisorydb2017}, basada en información pública existente en bases de datos como \gls{CVE}\todo{Al menos hay que poner qué es esto en una frase}.
 \end{itemize}
 
 El código \ref{prg03-01} muestra un ejemplo del resultado obtenido a la salida del terminal de comandos al realizar un análisis estático de vulnerabilidades con bundler-audit al archivo \textit{Gemfile.lock} de un proyecto:
@@ -91,7 +91,7 @@ Solution: upgrade to ~> 2.3.16, ~> 3.0.19, ~> 3.1.10, >= 3.2.11
 Unpatched versions found!
 \end{lstlisting}
 
-Además, bundler-audit permite actualizar la base de datos ruby-advisory-db yanalizar el fichero \textit{Gemfile.lock} desde el mismo comando, habilidad que resulta de gran utilidad para su ejecución en sistemas de \gls{IC}, como muestra el código \ref{prg03-02}:
+Además, bundler-audit permite actualizar la base de datos ruby-advisory-db y analizar el fichero \textit{Gemfile.lock} desde el mismo comando, habilidad que resulta de gran utilidad para su ejecución en sistemas de \gls{IC}, como muestra el código \ref{prg03-02}:
 
 \begin{lstlisting}[language=,caption={Ejecutando bundler-audit tras la actualización de las vulnerabilidades conocidas}, breaklines=true, label=prg03-02]
 $ bundle audit check --update
@@ -117,8 +117,9 @@ Nsp es la principal herramienta de interfaz de línea de comandos de Node Securi
 	\caption{Escaneo de vulnerabilidades en las dependencias de Node JS}
 	\label{nsp-check}
 \end{figure}
+\todo{La pantalla del terminal}
 
-Su utilización es simple, permitiendo incluso ignorar vulnerabilidades que puedan estar siendo tratadas en el momento del análisis y realizando consultas contra una base de datos de vulnerabilidades mantenida por Node Security Platform, que contiene información recopilada de múltiples fuentes (\gls{CVE} entre ellas). Basta con \textit{"nsp check"} para analizar las vulnerabilidades de la aplicación, recibiendo un resultado como el mostrado en la \autoref{nsp-check}.
+Su utilización es simple, permitiendo incluso ignorar vulnerabilidades que puedan estar siendo tratadas en el momento del análisis y realizando consultas contra una base de datos de vulnerabilidades mantenida por Node Security Platform, que contiene información recopilada de múltiples fuentes (por ejemplo \gls{CVE}). Basta con \textit{"nsp check"} para analizar las vulnerabilidades de la aplicación, recibiendo un resultado como el mostrado en la \autoref{nsp-check}.
 
 
 \section{Docker}
@@ -140,6 +141,7 @@ Docker (\autoref{docker-logo}) es una herramienta de virtualización diseñada p
 	\caption{Pila de funcionamiento de docker}
 	\label{docker-esquema}
 \end{figure}
+\todo{AQUI HABRIA QUE HACER LA REFERENCIA A LA FIGURA DEL APARTADO ANTERIOR O BUSCAR OTRA}
 
 Gracias al uso de docker dos desarrolladores no tendrán que, por ejemplo, preocuparse de la versión Java que cada uno tenga instalado en su propia máquina durante el desarrollo de la aplicación, ya que está podrá ser enviada de uno a otro en el interior de un contenedor, que funcionará de la misma manera en cualquiera de los dos entornos.
 
@@ -177,9 +179,9 @@ Clair (\autoref{clair-logo}) es un proyecto de código libre desarrollado por Co
 \end{figure}
 
 \begin{enumerate}
-	\item A intervalos regulares, Clair realiza una ingesta de metadatos de vulnerabilidad desde un conjunto configurado de fuentes (entre ellos \gls{CVE}) y los almacena en una base de datos PostgreSQL.
-	\item Un cliente configurado para utilizar la \gls{API} de Clair indexa y escanea sus imágenes de contenedores por capas,creando una lista de características presentes en la imagen y almacenándolas en la base de datos.
-	\item El cliente solicita a través de la \gls{API} a la base de datos las vulnerabilidades conocidas para para una imagen en particular, correlacionando las vulnerabilidades y características de la imagen, de manera que esta no requiere un escaneo completo para cada petición.
+	\item A intervalos regulares, Clair realiza una ingesta de metadatos de vulnerabilidad desde un conjunto configurado de fuentes \TODO{VER QUE MAS FUENTES APARTE DE CVE ESTAN UTILIZANDO} y los almacena en una base de datos PostgreSQL.
+	\item Un cliente configurado para utilizar la \gls{API} de Clair indexa y escanea sus imágenes de contenedores por capas, creando una lista de características presentes en la imagen y almacenándolas en la base de datos.
+	\item El cliente solicita a través de la \gls{API} a la base de datos las vulnerabilidades conocidas para una imagen en particular, correlacionando las vulnerabilidades y características de la imagen, de manera que esta no requiere un escaneo completo para cada petición.
 	\item En caso de que se produzcan actualizaciones para los metadatos de vulnerabilidad, se enviará una notificación que alertará a los sistemas de que se ha producido un cambio, siendo escaneada de nuevo la imagen la próxima vez que sea solicitado un informe.
 \end{enumerate}
 
@@ -210,14 +212,14 @@ Jenkins posee, entre otras, las siguientes ventajas:
 
 \begin{itemize}
 	\item \textbf{Integración Continua y Despliegue Continuo}: Al ser un servidor de automatización extensible, Jenkins puede ser utilizado simplemente como un servidor de \gls{IC} o convertirse en un entorno completo de \gls{IC} y \gls{DC} para cualquier tipo de proyecto.
-	\item \textbf{Fácil instalación}: Jenkins es una aplicación auto-contenida diseñada con Java, lista para ser ejecutada \TODO{ out-of-the-box} y empaquetada para los \gls{SO} Windows, Mac OSX, así como cualquier sistema Unix.
+	\item \textbf{Fácil instalación}: Jenkins es una aplicación auto-contenida diseñada con Java, lista para ser ejecutada \TODO{ out-of-the-box} y empaquetada para los \gls{SO} Windows y Mac OSX, así como cualquier sistema Unix.
 	\item \textbf{Fácil configuración}: Jenkins aporta una configuración mediante interfaz web de fácil manejo, que incluye análisis de errores y ayuda en compilaciones. \TODO{Jenkins can be easily set up and configured via its web interface, which includes on-the-fly error checks and built-in help.}
 	\item \textbf{Extensible}: Jenkins dispone de cientos de plugins en su centro de actualizaciones, capaz de ser integrados prácticamente con cualquier herramienta necesaria en los procesos de integración continua y despliegue continuo.
 	\item \textbf{Distribuido}: Jenkins puede distribuir fácilmente el trabajo en varias máquinas, lo que ayuda a generar mejoras, pruebas y despliegues en varias plataformas rápidamente.
 	\item \textbf{Open Source}: Es una herramienta de código libre con el apoyo de una gran comunidad.
 	\item \textbf{Soporte de repositorio de control de versiones}: Gracias a Jenkins, el código puede ser descargado directamente desde un repositorio de contro de versiones (GitHub, BitBucket, etc.) con multitud de opciones.
-	\item {Soporte de scripts}Ñ Puede ejecutar scripts de bash, shell, ANT y proyectos Maven.
-	\item {Notificaciones}: Jenkins puede ser utilizado para publicar resultados y enviar emails de notificación de los mismos.
+	\item \textbf{Soporte de scripts}: Puede ejecutar scripts de bash, shell, ANT y proyectos Maven.
+	\item \textbf{Notificaciones}: Jenkins puede ser utilizado para publicar resultados y enviar emails de notificación de los mismos.
 \end{itemize}
 
 \TODO{Pipeline - A user-defined model of a continuous delivery pipeline, for more read the Pipeline chapter in this handbook.\\Debo poner también la imagen de una pipeline de trabajo con verdes y rojos.}

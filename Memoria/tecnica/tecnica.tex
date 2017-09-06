@@ -7,15 +7,24 @@
 
 Es por esto, que el apartado actual está orientado a conocer las características de la realidad representada y a introducir las bases tecnológicas del presente \gls{TFM}, resaltando los conceptos más importantes.
 
-\section{Metodología Ágil}
+\section{Metodología ágil}
 
 La tecnología actual avanza a una velocidad considerable, provocando a su paso la renovación de la gestión de proyectos informáticos, debiendo esta alcanzar la velocidad de los cambios ocasionados por esta aceleración. 
 
-Así, la calidad, eficiencia, rapidez y flexibilidad en la entrega de un determinado producto se ha convertido en prioritaria, dando paso a la conocida como \textbf{Metodología Ágil}.
+Así, la calidad, eficiencia, rapidez y flexibilidad en la entrega de un determinado producto se ha convertido en prioritaria, dando paso a la conocida como metodología ágil.
 
-La Metodología Ágil envuelve un enfoque para la toma de decisiones en los proyectos software que plantean métodos de ingeniería del software basado en el desarrollo iterativo e incremental, donde los y  soluciones evolucionan con el tiempo según la necesidad del proyecto. Así el trabajo es realizado mediante la colaboración de equipos auto-organizados y multidisciplinarios, inmersos en un proceso compartido de toma de decisiones a corto plazo\cite{vera2014}.
+La metodología ágil envuelve un enfoque para la toma de decisiones en los proyectos software que plantean métodos de ingeniería del software basado en el desarrollo iterativo e incremental, donde los requisitos y las soluciones evolucionan con el tiempo según la necesidad del proyecto. Así el trabajo es realizado mediante la colaboración de equipos auto-organizados y multidisciplinarios, inmersos en un proceso compartido de toma de decisiones a corto plazo\cite{vera2014}.
 
-La \autoref{agil} muestra el ciclo de vida en cada iteracción de esta metodología.
+El uso de procesos ágiles puede reportar los siguientes beneficios a la compañía:
+
+\begin{itemize}
+	\item Flexibilidad en el proceso y las definiciones de los productos.
+	\item Realimentación continua con el cliente.
+	\item Iteracción constante del producto, que se va analizando a medida avanza.
+	\item Calidad mejorada.
+\end{itemize}
+
+La \autoref{agil} muestra el ciclo de vida en cada iteracción que sufre la aplicación mediante la utilización de dicha metodología.
 
 \begin{figure}[htbp]
 	\centering
@@ -25,29 +34,19 @@ La \autoref{agil} muestra el ciclo de vida en cada iteracción de esta metodolog
 	\label{agil}
 \end{figure}
 
-El uso de procesos ágiles reporta los siguientes beneficios:
+\section{Integración Continua (\gls{IC}) y Despliegue Continuo (\gls{DC})}
 
-\begin{itemize}
-	\item Flexibilidad en el proceso y las definiciones de los productos.
-	\item Realimentación continua con el cliente.
-	\item Iteracción constante del producto, que se va analizando a medida avanza.
-	\item Calidad mejorada.
-\end{itemize}
+Integración continua (\gls{IC}) es una práctica de desarrollo que requiere que los desarrolladores integren nuevos cambios en el código de la aplicación varias veces en un sólo día. Cada vez que esto ocurre, la inserción es verificada por una compilación automática, permitiendo a los equipos de trabajo implicados en el proceso detectar cualquier problema que el código pudiera contener en cortos periodos de tiempo.
 
+Integrando código regularmente los errores pueden ser detectados rápidamente y corregidos con más facilidad, debido a que se trata de un proceso muy frecuente, la búsqueda del error va a quedar muy acotada.
 
-\section{Integración Continua \gls{IC} y Despliegue Continuo \gls{DC}}
-
-Integración continua \gls{IC} es una práctica de desarrollo que requiere que los desarrolladores integren nuevos cambios en el código de la aplicación varias veces en un sólo día. Cada vez que esto ocurre, la inserción es verificada por una compilación automática, permitiendo a los equipos de trabajo implicados en el proceso detectar cualquier problema de forma temprana.
-
-Integrando código regularmente los errores pueden ser detectados rápidamente y corregidos con más facilidad, debido a que al tratarse de un proceso frecuente la búsqueda del error va a quedar muy acotada.
-
-El Despliegue Continuo \gls{DC} está estrechamente relacionado a la \gls{IC} y está referido a la liberación en los entornos de producción de la compañía de \gls{SW} que está continuamente siendo probado de manera automática.
+Por otro lado, el Despliegue Continuo (\gls{DC}) está estrechamente relacionado a la \gls{IC} y está referido a la liberación del código, en los entornos de producción de la compañía, que está sometido a pruebas continuamente y de forma automática.
 
 Adoptar ambos conceptos (\gls{IC} y \gls{DC}) no solo reduce los riesgos y permite una localización temprana de fallos de código, sino que también permite aumentar la velocidad de trabajo con el \gls{SW}\cite{IC2017}.
 
 \section{Ciclo de Desarrollo Seguro de software (\gls{SDLC})}
 
-Un ciclo de Desarrollo Seguro de software (en inglés, Software Development Life Cycle \gls{SDLC}) es un marco de trabajo que define el proceso utilizado por las compañías a la hora de construir una aplicación desde sus inicios hasta el desmantelamiento de la misma. A lo largo de los últimos años,han surgido multitud de modelos para \gls{SDLC}, que han sido utilizados de diversas maneras acorde a las circunstancias de cada aplicación o empresa en general. Las fases comunes a todos estos modelos para el Ciclo de Desarrollo de software son las siguientes:
+Un ciclo de Desarrollo Seguro de software (en inglés, Software Development Life Cycle, \gls{SDLC}) es un marco de trabajo que define el proceso utilizado por las compañías a la hora de construir una aplicación desde sus inicios hasta el desmantelamiento de la misma. A lo largo de los últimos años,han surgido multitud de modelos para \gls{SDLC}, que han sido utilizados de diversas maneras acorde a las circunstancias de cada aplicación o empresa en general. Las fases o etapas comunes a todos estos modelos para el Ciclo de Desarrollo de software son las siguientes:
 
 \begin{itemize}
 	\item Requisitos y planificación.
@@ -62,7 +61,7 @@ Con esto, un proceso de implementación de seguridad en el proceso \gls{SDLC} ga
 
 \section{Análisis estático}
 
-Análisis estático, o también conocido por análisis estático de código, es un método de depuración de aplicaciones que se basa en exámenes al código cuando éste no se está ejecutando. El proceso de análisis estático es realizado con la ayuda de herramientas automatizadas y asiste a los desarrolladores aportando variada información valiosa mediante el escrutinio del código, utilizando mecanismos y herramientas (por ejemplo revisión de impresiones y campos de formularios) que podrían escapar al ojo humano. El análisis realizado por un humano recibe el nombre de comprensión de código\cite{rouse2017}.
+Análisis estático, o también conocido por análisis estático de código, es un método de depuración de aplicaciones que se basa en exámenes al código cuando éste no se está ejecutando. El proceso de análisis estático es realizado con la ayuda de herramientas automatizadas y asiste a los desarrolladores aportando valiosa información mediante el escrutinio del código, utilizando mecanismos y herramientas (por ejemplo revisión de impresiones y campos de formularios) que podrían escapar al ojo humano\footnote{El análisis realizado por un humano recibe el nombre de comprensión de código}\cite{rouse2017}.
 
 \TODO{Un último párrafo donde enlazar el análisis estático con que se va a realizar de las dependencias del código y con contenedores de imágenes}
 
@@ -73,11 +72,11 @@ Bundler is the de facto way of managing dependencies. It provides, among other t
 
 La nube es cada vez más grande, más potente y posee más usuarios. Al mismo tiempo, permite la ejecución de aplicaciones más y más potentes, que requieren garantizar el correcto funcionamiento de esta, actualmente y en el futuro.
 
-Por este motivo, es primordial utilizar ua plataforma que los recursos en la medida de lo posible a la vez que permita la escalabilidad, con el fin de poder ampliar sus características de forma sencilla en caso de ser necesario.
+Por este motivo, es primordial utilizar una plataforma que optimice los recursos, en la medida de lo posible, a la vez que permita la escalabilidad, con el fin de poder ampliar sus características de forma sencilla en caso de ser necesario.
 
 Al hablar de nube se está hablando de virtualización. Ejecutar un \gls{SO} virtual para cada instancia de una aplicación es un proceso muy pesado y lento, es de este problema donde surge el concepto de virtualización basada en contenedores, también conocida como virtualización a nivel de sistema operativo.
 
-Un contenedor no es más que una nueva forma de optimizar los recursos de los que dispone una plataforma creando pequeños espacios virtuales de as aplicaciones necesarias, en las que unicamente será necesario cargar el núcleo de la aplicación y las dependencias de esta, pero funcionando siempre sobre un único kernel, o sitema operativo\cite{velazco2016}. La \autoref{contenedores} muestra las diferencias en el modelo de capas de un sistema de virtualización y tradicional y uno basado en contenedores.
+Un contenedor no es más que una nueva forma de optimizar los recursos de los que dispone una plataforma, creando pequeños espacios virtuales de las aplicaciones necesarias, en las que unicamente se tendrá que cargar el núcleo de la aplicación y las dependencias de esta, pero funcionando siempre sobre un único kernel, o sitema operativo\cite{velazco2016}. La \autoref{contenedores} muestra las diferencias en el modelo de capas de un sistema de virtualización tradicional y uno basado en contenedores.
 
 \begin{figure}[htbp]
 	\centering
