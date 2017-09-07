@@ -33,12 +33,9 @@ A continuación se muestran algunas de las características que han llevado a Gi
 	\item GitHub es gratuito e ilimitado para repositorios de proyectos públicos, sólo aquellos usuarios que deseen mantener proyectos en privado deberán pagar una cuota. 
 \end{itemize}
 
-\TODO{TODO - Una frase de cierre al apartado}
-
-
 \section{Bundler-audit}
 
-Como ya fue comentado en el apartado \ref{dependencias} cada aplicación tiene sus dependencia, las que a su vez pueden contener vulnerabilidades de seguridad. Encontrar las vulnerabilidades de seguridad que presenta una aplicación es una tarea necesaria y tediosa, que de ser obviada no impedirá que la aplicación generada siga siendo ejecutada como si todo estuviera funcionando en perfectas condiciones, pero que ocultará agujeros en la aplicación que podrán ser utilizados en diversa manera por algún usuario malintencionado.
+Como ya fue comentado en el apartado \ref{dependencias} cada aplicación tiene sus dependencia, las que a su vez pueden contener vulnerabilidades de seguridad. Encontrar las vulnerabilidades de seguridad que presenta una aplicación es una tarea necesaria pero tediosa, que de ser obviada no impedirá que la aplicación generada siga siendo ejecutada como si todo estuviera funcionando en perfectas condiciones, pero ocultando agujeros de seguridad en la aplicación que podrán ser utilizados en diversa manera por algún usuario malintencionado.
 
 Para cualquier aplicación escrita con Ruby y en ausencia de alguna herramienta automatizada de análisis de vulnerabilidades, el desarrollador del código deberá estar suscrito a cada lista de correo relacionada con anuncios de seguridad de dependencias y realizar un seguimiento exclusivo de vulnerabilidades y actualizaciones de seguridad de cada una de las dependencias incluidas en la aplicación, para cada aplicación en la que participe\cite{prescott2015}.
 
@@ -103,12 +100,9 @@ Por último, y como ya se ha mencionado con anterioridad en este apartado, es po
 $ bundle audit check --ignore OSVDB-108664
 \end{lstlisting}
 
-
-\TODO{TODO - Cierre del apartado. de Rubysec para proyectos Ruby}
-
 \section{Nsp}
 
-Nsp es la principal herramienta de interfaz de línea de comandos de Node Security Platform y es una de las herramientas más utilizadas para monitorizar la seguridad en aplicaciones node, permitiendo auditar el archivo \textit{package.json} de dependencias de la misma.
+Nsp es la principal herramienta de interfaz de línea de comandos de Node Security Platform\cite{nodesp2017} y es una de las herramientas más utilizadas para monitorizar la seguridad en aplicaciones node, permitiendo auditar el archivo \textit{package.json} de dependencias de la misma.
 
 \begin{figure}[htbp]
 	\centering
@@ -118,7 +112,7 @@ Nsp es la principal herramienta de interfaz de línea de comandos de Node Securi
 	\label{nsp-check}
 \end{figure}
 
-Su utilización es simple, permitiendo incluso ignorar vulnerabilidades que puedan estar siendo tratadas en el momento del análisis y realizando consultas contra una base de datos de vulnerabilidades mantenida por Node Security Platform, que contiene información recopilada de múltiples fuentes (por ejemplo \gls{CVE}). Basta con \textit{"nsp check"} para analizar las vulnerabilidades de la aplicación, recibiendo un resultado como el mostrado en la \autoref{nsp-check}.
+Su utilización es simple, permitiendo incluso ignorar vulnerabilidades que puedan estar siendo tratadas en el momento del análisis y realizando consultas contra una base de datos de vulnerabilidades mantenida por Node Security Platform, que contiene información recopilada de múltiples fuentes. Basta con \textit{"nsp check"} para analizar las vulnerabilidades de la aplicación, recibiendo un resultado como el mostrado en la \autoref{nsp-check}.
 
 
 \section{Docker}
@@ -133,7 +127,15 @@ Su utilización es simple, permitiendo incluso ignorar vulnerabilidades que pued
 
 Docker (\autoref{docker-logo}) es una herramienta de virtualización diseñada para aportar beneficios a desarrolladores, testers y administradores de sistemas, creando contenedores ligeros y portables para que las aplicaciones puedan ser ejecutadas en cualquier máquina, con sólo tener docker instalado e independientemente del \gls{SO} de la propia máquina que lo contenga\cite{garciaoterino2015}. Esta plataforma de código abierto hace uso de las funciones de aislamiento de recursos que provee el kernel de Linux para dar lugar a contenedores independientes, dentro de los cuales se ejecutará una única aplicación con sus respectivas dependencias, funcionando siempre con este único kernel, en lugar de virtualizar uno por cada contenedor o máquina virtual.
 
-\TODO{La tecnología Docker fue creada al principio por encima de la tecnología LXC (que la mayoría de las personas relacionan con los contenedores Linux "tradicionales"), aunque se ha alejado de esa dependencia. LXC fue útil como virtualización ligera, pero no contaba con un gran desarrollador o una experiencia de usuario. La tecnología Docker proporciona más que la capacidad de ejecutar contenedores, también facilita el proceso de creación y diseño de contenedores mediante el envío de imágenes y versionado de imágenes (entre otras cosas) Añadir IMAGEN DOCKER-ESQUEMA}
+En sus orígenes, la tecnología Docker fue creada por encima de la tecnología LXC (término comúnmente relacionado con los contenedores Linux "tradicionales"), aunque actualmente está alejado de esta dependencia debido a que, a pesar de tener utilidad como virtualización ligera, no cuenta con un gran desarrollo como respaldo ni una gran experiencia de usuario. La tecnología Docker proporciona más que la capacidad de ejecutar contenedores, también facilita el proceso de creación y diseño de contenedores mediante el envío de imágenes y versionado de imágenes. La \autoref{docker-esquema} muestra una clara diferencias en las capas aportadas por cada uno de estos modos de virtualización de contenedores.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=1.0\linewidth]
+	{entorno/figuras/docker-esquema.png}
+	\caption{Contenedores Linux tradicionales vs  Docker}
+	\label{docker-esquema}
+\end{figure}
 
 Gracias al uso de docker dos desarrolladores no tendrán que, por ejemplo, preocuparse de la versión Java que cada uno tenga instalado en su propia máquina durante el desarrollo de la aplicación, ya que está podrá ser enviada de uno a otro en el interior de un contenedor, que funcionará de la misma manera en cualquiera de los dos entornos.
 
@@ -171,7 +173,7 @@ Clair (\autoref{clair-logo}) es un proyecto de código libre desarrollado por Co
 \end{figure}
 
 \begin{enumerate}
-	\item A intervalos regulares, Clair realiza una ingesta de metadatos de vulnerabilidad desde un conjunto configurado de fuentes \TODO{VER QUE MAS FUENTES APARTE DE CVE ESTAN UTILIZANDO} y los almacena en una base de datos PostgreSQL.
+	\item A intervalos regulares, Clair realiza una ingesta de metadatos de vulnerabilidad desde la lista mantenida de vulnerabilidades \gls{CVE} y los almacena en una base de datos PostgreSQL.
 	\item Un cliente configurado para utilizar la \gls{API} de Clair indexa y escanea sus imágenes de contenedores por capas, creando una lista de características presentes en la imagen y almacenándolas en la base de datos.
 	\item El cliente solicita a través de la \gls{API} a la base de datos las vulnerabilidades conocidas para una imagen en particular, correlacionando las vulnerabilidades y características de la imagen, de manera que esta no requiere un escaneo completo para cada petición.
 	\item En caso de que se produzcan actualizaciones para los metadatos de vulnerabilidad, se enviará una notificación que alertará a los sistemas de que se ha producido un cambio, siendo escaneada de nuevo la imagen la próxima vez que sea solicitado un informe.
@@ -181,8 +183,8 @@ Por otro lado, Clairctl es uno de los clientes más utilizados para alcanzar la 
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.80\linewidth]
-	{figuras/emplazamiento-imagen.png}
+	\includegraphics[width=1.0\linewidth]
+	{entorno/figuras/esquema-clair.png}
 	\caption{Esquema de escaneo y detección de vulnerabilidades en imágenes Docker}
 	\label{clair-esquema}
 \end{figure}
@@ -214,7 +216,15 @@ Jenkins posee, entre otras, las siguientes ventajas:
 	\item \textbf{Notificaciones}: Jenkins puede ser utilizado para publicar resultados y enviar emails de notificación de los mismos.
 \end{itemize}
 
-\TODO{Pipeline - A user-defined model of a continuous delivery pipeline, for more read the Pipeline chapter in this handbook.\\Debo poner también la imagen de una pipeline de trabajo con verdes y rojos.}
+La \autoref{jenkins-pipeline} muestra el aspecto del panel de ejecuciones de líneas de trabajo o pipelines, con múltiples tareas, en Jenkins.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.80\linewidth]
+	{entorno/figuras/jenkins-pipeline.png}
+	\caption{Pipeline de trabajo en Jenkins}
+	\label{jenkins-pipeline}
+\end{figure}
 
 \section{Slack}
 
@@ -229,7 +239,5 @@ Slack (\autoref{slack-logo}) es una herramienta de mensajería en tiempo real di
 \end{figure}
 
 Por otro lado, Slack permite a sus usuarios trabajar con otros servicios basados en la web, amplificando aún más el trabajo colaborativo y proveyendo integración con múltiples herramientas de uso habitual: Dropbox, Trello, Google Drive, GitHub y Jenkins entre otras.
-
-\TODO{TODO - ¿Cierre al apartado?}
 
 \endinput
