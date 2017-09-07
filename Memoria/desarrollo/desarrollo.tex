@@ -3,12 +3,12 @@
 \chapter{Desarrollo de la solución}\label{chp-04}
 \epigraph{As an engineer, you learn there is a solution to every problem. It may take you a while, but eventually you're going to find it.}{Tony Cárdenas\\American politician}
 
-\lettrine[lraise=-0.1, lines=2, loversize=0.2]{E}{l} apartado actual está dedicado a comprender el proceso seguido durante el desarrollo de la solución realizada. Comenzando con una introducción que sitúe al lector en condiciones que le permitan reproducir el proceso presentado y los primeros pasos a seguir en la preparación del entorno, desplegando los sistemas que componen dicha solución para así continuar automatizando el proceso en vistas a un uso prolongado en el tiempo. Por último, se evaluará la solución obtenida en un proceso de verificación de la solución mostrando el resultado final obtenido.
+\lettrine[lraise=-0.1, lines=2, loversize=0.2]{E}{l} apartado actual está dedicado a comprender el proceso seguido durante el desarrollo de la solución realizada. Comenzando con una introducción que sitúe al lector en condiciones que le permitan reproducir el proceso presentado y los primeros pasos a seguir en la preparación del entorno, desplegando los sistemas que componen dicha solución, para así continuar automatizando el proceso en vistas a un uso prolongado en el tiempo. Por último, se evaluará la solución obtenida en un proceso de verificación de la solución mostrando el resultado final obtenido.
 
 \section{Preparación del entorno de trabajo}\label{preparacion}
 
 \subsection{Docker}
-Como ya ha quedado reflejado en apartados anteriores, las nuevas habilidades proporcionadas por la virtualización mediante contenedores de aplicación permiten desplegar el sistema compuesto de múltiples contenedores con independencia al \gls{SO} en el que estos se ejecuten, siendo el único requisito indispensable contar con el motor de virtualización de docker instalado y ejecutándose en la máquina. Por esto, toda solución desarrollada a partir de virtualización de contenedores comenzará con la instalación de docker en su sistema .
+Como ya ha quedado reflejado en apartados anteriores, las nuevas habilidades proporcionadas por la virtualización mediante contenedores de aplicación permiten desplegar el sistema compuesto de múltiples contenedores con independencia al \gls{SO} en el que estos se ejecuten, siendo el único requisito indispensable contar con el motor de virtualización de docker instalado y ejecutándose en la máquina. Por esto, toda solución desarrollada a partir de virtualización de contenedores comenzará con la instalación de docker en su sistema.
 
 Por otro lado, se va a hacer uso de Docker compose, una herramienta de los creadores de Docker diseñada para permitir la definición, ejecución y seguimiento de aplicaciones Docker compuesta por múltiples contenedores. Será con la ayuda de Docker Compose como se despliegue el sistema utilizado.
 
@@ -42,8 +42,8 @@ clair:
 	\item \textbf{image:} ubicación de la imagen de Docker que va a ser desplegada. Este parámetro puede contener bien una referencia a un repositorio de imágenes Docker o bien a la ubicación del archivo \textit{Dockerfile}, en la propia máquina, con las instrucciones para de creación de dicha imagen.
 	\item \textbf{restart:} instrucciones de reinicio del contenedor ante imprevistos.
 	\item \textbf{depends\_on:} con la instrucción \textit{depends\_on} Docker Compose entenderá que el contenedor que se está desplegando depende de que exista otro (en el ejemplo actual postgres) en ejecución y no intentará ejecutar un contenedor sin la presencia del otro.
-	\item \textbf{ports:} traducción de puertos "red\_externa:red\_docker\_virtualizada" necesaria para poder acceder a dichos puertos desde el exterior al sistema Docker.
-	\item \textbf{links:} permite conectar el contenedor con el servicio que se ejecuta en otro contenedo de forma que será accesible desde el hostname o el alias referenciado (https://postgres en el ejemplo actual).
+	\item \textbf{ports:} traducción de puertos "red\_externa:red\_docker\_virtualizada" necesaria para poder acceder al servicio desplegado desde el exterior del sistema Docker.
+	\item \textbf{links:} permite conectar el contenedor con el servicio que se ejecuta en otro contenedor de forma que será accesible desde el hostname o el alias referenciado (http://postgres en el ejemplo actual).
 	\item \textbf{volumes:} especifica la ruta o el volumen de Docker que será montado en el nuevo contenedor y la ruta destino a montar, en la forma "ruta\_origen:ruta\_destino".
 	\item \textbf{command:} comando que ejecutará el contenedor una vez arrancado.
 \end{itemize}
@@ -111,7 +111,7 @@ Una vez definidos todos los elementos, la ejecución del sistema se resume en la
 
 Ahora que todos los sistemas están funcionando en el sistema de contenedores es momento de comprobar que la configuración proporcionada es la correcta y que el comportamiento es el esperado. Para ello, y antes de automatizar las tareas con la ayuda de Jenkins, se van a realizar desde el interfaz de comandos las instrucciones necesarias que confirmen que los análisis se están llevando a cabo sin problema por parte de las herramientas de análisis.
 
-El \autoref{prg04-05} muestra la ayuda aportada por el comando "docker exec", que será la utilidad proporcionada por Docker para la ejecución de instrucciones en el interior de los contenedores que se encuentran en ejecución en el entorno (Jenkins, clair\_clair y c\_postgres).
+El \autoref{prg04-05} muestra la ayuda aportada por el comando "docker exec", utilidad proporcionada por Docker para la ejecución de instrucciones en el interior de los contenedores que se encuentran en ejecución en el entorno (Jenkins, clair\_clair y c\_postgres).
 
 \begin{lstlisting}[language=,caption={Comando de ayuda de docker exec}, breaklines=true, label=prg04-05]
 $ docker exec --help
@@ -148,7 +148,7 @@ root@394bb66c4df0:/home/contenedor# pwd
 Donde:
 
 \begin{itemize}
-	\item \textit{--rm} indica al demonio de Docker que una vez se termine de trabajar en el contenedor creado, este debe ser eliminado del sistema.
+	\item \textit{\texttt{-{}-}rm} indica al demonio de Docker que una vez se termine de trabajar en el contenedor creado, este debe ser eliminado del sistema.
 	\item \textit{-t -i} sirve para especificar que se va a abrir un terminal (-t) interactivo (-i) con el contenedor.
 	\item \textit{-v} irá continuado por el volumen que se va a montar en el interior del contenedor de Docker.
 	\item \textit{imagen:tag} será la imagen utilizada para crear el contenedor.
@@ -209,13 +209,13 @@ El funcionamiento de nsp en el terminal de comando es muy similar al de bundler-
 	\label{nsp}
 \end{figure}
 
-\TODO{UN PARRAFO MAS EXPLICANDO LA IMAGEN}
+La \autoref{nsp} sigue el proceso de descargar un archivo de dependencias package.json desde un repositorio de GitHub y analizarlo para descubrir que, efectivamente, este contiene una vulnerabilidad.
 
-Con lo que queda demostrado que es posible desde el contenedor que ejecuta nsp acceder a la \gls{API} de GitHub, descargar un archivo \textit{package.json} con las dependencias de la aplicación node y realizar un análisis sobre este.
+Con lo que queda demostrado que es posible desde el contenedor que ejecuta nsp acceder a la \gls{API} de GitHub, descargar un archivo de dependencias de la aplicación node y realizar un análisis sobre este.
 
 \subsubsection{Clair y Clairctl}
 
-La forma de funcionamiento de Clairctl con Clair es diferente a las vistas para Bundler Audit y NSP, ya que Clairctl requiere de una configuración apropiada que le permita comunicarse con Clair y deberá realizar una serie de pasos para ello:
+La forma de funcionamiento de Clairctl con Clair es diferente a las vistas para Bundler Audit y NSP, ya que Clairctl requiere de una configuración apropiada que le permita comunicarse con Clair (Apéndice \autoref{ap-01}) y deberá realizar una serie de pasos para ello:
 
 \begin{enumerate}
 	\item Enviará la imagen que se quiere analizar a Clair para que la almacene (push). Dicha imagen podrá encontrarse en la máquina local que contiene a Clairctl o en un repositorio de imágenes de internet (pull).
@@ -230,7 +230,7 @@ eleazarr [~/Master_Ciberseguridad_US/Entorno] (master)$ docker run --rm -ti -v /
 root@59d0b5391fc6:/go# cd src/github.com/jgsqware/clairctl/
 root@59d0b5391fc6:/go/src/github.com/jgsqware/clairctl# clairctl health
 
-Clair: ✔
+Clair: OK
 
 root@59d0b5391fc6:/go/src/github.com/jgsqware/clairctl# ./clairctl analyze --local entorno_clairctl:latest
 2017-09-03 18:03:45.717118 I | config: retrieving interface for local IP
@@ -387,6 +387,8 @@ En la sección actual se va a utilizar el contenido empleado en los apartados de
 
 \subsection{Análisis de imágenes Docker}
 
+En primer lugar, 
+
 \subsection{Análisis de dependencias Ruby}
 
 \subsection{Análisis de de dependencias Node.js}
@@ -397,6 +399,6 @@ ALGUNAS EJECUCIONES QUE MUESTREN VULNERABILIDADES Y SOLUCIONAR ALGUNA.
 
 \section{Resultados obtenidos}
 
-CIERRE DEL APARTADO
+Con la información expuesta en el apartado actual queda demostrado que es posible insertar en el proceso de desarrollo de aplicaciones de la compañía un proceso automático de detección de vulnerabilidades que, lejos de perturbar el trabajo de un desarrollador, le proveerá de informes periódicos que le permitan conocer el estado actual de las dependencias que está implementando, así como advertir el equipo de trabajo DevOps de las vulnerabilidades que pudieran contener los contenedores de aplicación utilizados para dar soporte a estas.
 
 \endinput
