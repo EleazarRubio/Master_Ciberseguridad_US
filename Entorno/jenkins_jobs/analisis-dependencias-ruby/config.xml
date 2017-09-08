@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.12.2">
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>RUBY_REPOS</name>
+          <description>gemfile_vulnerable</description>
+          <defaultValue>gemfile_vulnerable</defaultValue>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+      <triggers>
+        <hudson.triggers.TimerTrigger>
+          <spec>H 1 * * *</spec>
+        </hudson.triggers.TimerTrigger>
+      </triggers>
+    </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.39">
+    <script>def RUBY_REPOS = RUBY_REPOS.split(&quot; &quot;)
+def fail = false
+def repos_affected = &quot;Repos affected:\n&quot;
+def repos_not_affected = &quot;Repos examined:\n&quot;
+def audit_files = [&quot;.bundle-auditrc&quot;, &quot;Gemfile.lock&quot;, &quot;Gemfile&quot;]
+
+node() {
+    try {
+        stage(&apos;Download dependencies files&apos;) {
+            for (int i = 0; i &lt; RUBY_REPOS.size() ; i++) {
+                sh &quot;mkdir -p ./${RUBY_REPOS[i]}&quot;
+                for (int j = 0; j &lt; audit_files.size(); j++) {
+                    sh (script: &quot;curl https://raw.githubusercontent.com/EleazarWorkshare/${RUBY_REPOS[i]}/master/${audit_files[j]} -o ./${RUBY_REPOS[i]}/${audit_files[j]} -f&quot;, returnStatus: true)
+                }
+            }
+        }
+        stage(&apos;Generate Audited repo report&apos;) {
+            for (int i = 0; i &lt; RUBY_REPOS.size() ; i++) {
+                def ignore = &quot;&quot;
+                def audit_exceptions = audit_files.first()
+                if (fileExists(&quot;./${RUBY_REPOS[i]}/${audit_exceptions}&quot;)){
+                    ignore = readFile encoding: &apos;UTF-8&apos;, file: &quot;./${RUBY_REPOS[i]}/${audit_exceptions}&quot;
+                    ignore = ignore.split(&quot;\n&quot;).join(&quot; &quot;)
+                }
+                def out = sh (script: &quot;sudo docker run --rm -i -v /var/lib/docker/volumes/entorno_data-jenkins/_data/workspace/analisis-dependencias-ruby/${RUBY_REPOS[i]}/Gemfile.lock:/Gemfile.lock -v /var/lib/docker/volumes/entorno_data-jenkins/_data/workspace/analisis-dependencias-ruby/${RUBY_REPOS[i]}/Gemfile:/Gemfile entorno_ruby-tool:latest bundle-audit check --update ${ignore} || true&quot;, returnStdout: true)
+                writeFile encoding: &apos;UTF-8&apos;, file: &quot;./${RUBY_REPOS[i]}/report.txt&quot;, text: &quot;${out}&quot;
+            }
+        }
+        stage(&apos;Generate html report&apos;) {
+            def index = &quot;&lt;h1&gt;&lt;b&gt;Ruby services&lt;/b&gt;&lt;/h1&gt;&quot;
+            for (int i = 0; i &lt; RUBY_REPOS.size() ; i++) {
+                def report = readFile encoding: &apos;UTF-8&apos;, file: &quot;./${RUBY_REPOS[i]}/report.txt&quot;
+                if(!report.contains(&quot;No vulnerabilities found&quot;)){
+                    index += &quot;&lt;h3&gt;&lt;b&gt;${RUBY_REPOS[i]}&lt;/b&gt;&lt;/h3&gt;&lt;p&gt;&quot; + report.replaceAll(&quot;(\r\n|\n)&quot;, &quot;&lt;br /&gt;&quot;) + &quot;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;&quot;
+                    repos_affected += &quot;${RUBY_REPOS[i]}\n&quot;
+                    fail = true
+                } else {
+                    repos_not_affected += &quot;${RUBY_REPOS[i]}\n&quot;
+                }
+            }
+            writeFile encoding: &apos;UTF-8&apos;, file: &quot;./reports/index.html&quot;, text: &quot;${index}&quot;
+            publishHTML(
+                [allowMissing: false,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: &apos;reports&apos;,
+                reportFiles: &apos;index.html&apos;,
+                reportName: &apos;HTML Report&apos;])
+        }
+//        stage(&apos;Notify generated report&apos;) {
+//            if (fail == true){
+//               slackSend channel: &apos;static-analysis&apos;,
+//                      color: &apos;#FF0000&apos;,
+//                      message: &quot;[FAILED] Ruby analysis - Vulnerabilities found!\n${repos_affected}\nHTML report:\nhttps://{URL_TO_THE_REPORT}/${env.BUILD_NUMBER}/HTML_Report/&quot;,
+//                      tokenCredentialId: &apos;Slack-Jenkins-Ruby&apos;
+//            } else {
+//                slackSend channel: &apos;static-analysis&apos;,
+//                      color: &apos;#008000&apos;,
+//                      message: &quot;[OK] Ruby analysis - No vulnerabilities found!\n${repos_not_affected}&quot;,
+//                      tokenCredentialId: &apos;Slack-Jenkins-Ruby&apos;
+//            }
+//        }
+    } catch(Exception e) {
+        print(e)
+        currentBuild.result = &apos;FAILURE&apos;
+    } finally {
+        //deleteDir()
+        if (fail == true){
+            currentBuild.result = &apos;FAILURE&apos;
+        }
+    }
+}</script>
+    <sandbox>false</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>

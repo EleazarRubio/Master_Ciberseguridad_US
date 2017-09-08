@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.12.2">
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>NODEJS_REPOS</name>
+          <description>package_json_vulnerable</description>
+          <defaultValue>package_json_vulnerable</defaultValue>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+      <triggers>
+        <hudson.triggers.TimerTrigger>
+          <spec>H 1 * * *</spec>
+        </hudson.triggers.TimerTrigger>
+      </triggers>
+    </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.39">
+    <script>import groovy.json.JsonSlurperClassic
+
+def NODEJS_REPOS = NODEJS_REPOS.split(&quot; &quot;)
+def fail = false
+def repos_affected = &quot;Repos afectados:\n&quot;
+def repos_not_affected = &quot;Repos examinados:\n&quot;
+def audit_files = [&quot;.nsprc&quot;, &quot;package.json&quot;]
+
+def jsonParse(def string_to_json) {
+    new groovy.json.JsonSlurperClassic().parseText(string_to_json)
+}
+
+node() {
+    try {
+        stage(&apos;Download dependencies files&apos;) {
+            for (int i = 0; i &lt; NODEJS_REPOS.size() ; i++) {
+                sh &quot;mkdir -p ./${NODEJS_REPOS[i]}&quot;
+                for (int j = 0; j &lt; audit_files.size(); j++) {
+                    sh (script: &quot;curl https://raw.githubusercontent.com/EleazarWorkshare/${NODEJS_REPOS[i]}/master/${audit_files[j]} -o ./${NODEJS_REPOS[i]}/${audit_files[j]} -f&quot;, returnStatus: true)
+                }
+            }
+        }
+        stage(&apos;Generate Audited repo report&apos;) {
+            for (int i = 0; i &lt; NODEJS_REPOS.size() ; i++) {
+              def audit_exceptions = audit_files.first()
+              if (!fileExists(&quot;./${NODEJS_REPOS[i]}/${audit_exceptions}&quot;)){
+                sh &quot;touch ./${NODEJS_REPOS[i]}/${audit_exceptions}&quot;
+              }
+              def out = sh (script: &quot;sudo docker run --rm -i -v /var/lib/docker/volumes/entorno_data-jenkins/_data/workspace/analisis-dependencias-nodejs/${NODEJS_REPOS[i]}/package.json:/package.json -v /var/lib/docker/volumes/entorno_data-jenkins/_data/workspace/analisis-dependencias-nodejs/${NODEJS_REPOS[i]}/${audit_exceptions}:/${audit_exceptions} entorno_nodejs-tool:latest nsp check --output json --warn-only&quot;, returnStdout: true)
+              writeFile encoding: &apos;UTF-8&apos;, file: &quot;./${NODEJS_REPOS[i]}/report.json&quot;, text: &quot;${out}&quot;
+            }
+        }
+        stage(&apos;Generate html report&apos;) {
+            def index = &quot;&lt;h1&gt;&lt;b&gt;NodeJS services&lt;/b&gt;&lt;/h1&gt;&quot;
+            for (int i = 0; i &lt; NODEJS_REPOS.size() ; i++) {
+                def report = readFile encoding: &apos;UTF-8&apos;, file: &quot;./${NODEJS_REPOS[i]}/report.json&quot;
+                def json_report = jsonParse(report)
+                if(json_report.size() &gt; 0){
+                    index += &quot;&lt;h3&gt;&lt;b&gt;${NODEJS_REPOS[i]}&lt;/b&gt;&lt;/h3&gt;&lt;p&gt;&quot;
+                    for(int j = 0; j &lt; json_report.size(); j++){
+                        index += &quot;&lt;b&gt;Name: &lt;/b&gt;&quot; + json_report[j].module + &quot;&lt;br /&gt;&quot;
+                        index += &quot;&lt;b&gt;Version: &lt;/b&gt;&quot; + json_report[j].version + &quot;&lt;br /&gt;&quot;
+                        index += &quot;&lt;b&gt;Advisory: &lt;/b&gt;&quot; + json_report[j].advisory + &quot;&lt;br /&gt;&quot;
+                        index += &quot;&lt;b&gt;Title: &lt;/b&gt;&quot; + json_report[j].title + &quot;&lt;br /&gt;&quot;
+                        index += &quot;&lt;b&gt;Solution: &lt;/b&gt;&quot; + json_report[j].recommendation  + &quot;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;&quot;
+                    }
+                    repos_affected += &quot;${NODEJS_REPOS[i]}\n&quot;
+                    fail = true
+                } else {
+                    repos_not_affected += &quot;${NODEJS_REPOS[i]}\n&quot;
+                }
+            }
+            writeFile encoding: &apos;UTF-8&apos;, file: &quot;./reports/index.html&quot;, text: &quot;${index}&quot;
+            publishHTML(
+                [allowMissing: false,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: &apos;reports&apos;,
+                reportFiles: &apos;index.html&apos;,
+                reportName: &apos;HTML Report&apos;])
+        }
+//        stage(&apos;Notify generated report&apos;) {
+//            if (fail == true){
+//               slackSend channel: &apos;static-analysis&apos;,
+//                      color: &apos;#FF0000&apos;,
+//                      message: &quot;[FAILED] NodeJS analysis - Vulnerabilities found!\n${repos_affected}\nHTML report:\nhttps://{URL}/job/nodejs-analysis/${env.BUILD_NUMBER}/HTML_Report/&quot;,
+//                      tokenCredentialId: &apos;Slack-Jenkins-NodeJS&apos;
+//            } else {
+//                slackSend channel: &apos;static-analysis&apos;,
+//                      color: &apos;#008000&apos;,
+//                      message: &quot;[OK] NodeJS analysis - No vulnerabilities found!\n${repos_not_affected}&quot;,
+//                      tokenCredentialId: &apos;Slack-Jenkins-NodeJS&apos;
+//            }
+//        }
+    } catch(Exception e) {
+        print(e)
+        currentBuild.result = &apos;FAILURE&apos;
+    } finally {
+        deleteDir()
+        if (fail == true){
+            currentBuild.result = &apos;FAILURE&apos;
+        }
+    }
+}</script>
+    <sandbox>false</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>

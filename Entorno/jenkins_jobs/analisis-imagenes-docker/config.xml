@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.12.2">
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>DOCKER_REPOS</name>
+          <description>entorno_ruby-tool
+entorno_jenkins
+entorno_nodejs-tool
+entorno_clairctl</description>
+          <defaultValue>entorno_ruby-tool entorno_jenkins entorno_nodejs-tool entorno_clairctl</defaultValue>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+      <triggers/>
+    </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.39">
+    <script>def DOCKER_REPOS = DOCKER_REPOS.split(&quot; &quot;)
+node() {
+    try{
+        stage(&quot;Docker image security scan and report&quot;) {
+            for (i = 0; i &lt; DOCKER_REPOS.size(); i++)
+            {
+                withEnv([&quot;repos=${ DOCKER_REPOS[i] }&quot;]) {
+                    sh &apos;sudo docker run --rm -t -v entorno_reports:/go/src/github.com/jgsqware/clairctl/reports -v /var/run/docker.sock:/var/run/docker.sock:ro --net entorno_default --link clair_clair:clair -p 57330:57330 entorno_clairctl bash -c &quot;cd /go/src/github.com/jgsqware/clairctl/ ; ./clairctl analyze --log-level info --local $repos ; ./clairctl report --log-level info --local $repos&quot;&apos;
+                }
+            }
+        }
+        stage(&quot;Generate HTML report for Jenkins&quot;) {
+            def html_list = []
+            sh &apos;mkdir reports&apos;
+            for (i = 0; i &lt; DOCKER_REPOS.size(); i++)
+            {
+                withEnv([&quot;repos=${ DOCKER_REPOS[i] }&quot;]) {
+                    sh &apos;sudo mv /reports/html/analysis-$repos-latest.html $WORKSPACE/reports/$repos-latest.html&apos;
+                    html_list.add(&quot;$repos-latest.html&quot;)
+                }
+            }
+            publishHTML(
+                [allowMissing: false,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: &apos;reports&apos;,
+                reportFiles: html_list.join(&quot;,&quot;),
+                reportName: &apos;HTML Report&apos;])
+        }
+//        stage(&quot;Send notification&quot;) {
+//            def repos_list = []
+//            images.each{ repo, tag -&gt; repos_list.add(&quot;${repo}:${tag}&quot;) }
+//            def repos_string = repos_list.join(&quot;\n&quot;)
+//            slackSend channel: &apos;base-image-analysis&apos;,
+//               color: &apos;#0077FF&apos;,
+//                message: &quot;[GENERATED] Docker images analysis:\n${repos_string}\n HTML report:\nhttps://dev-deploy.workshare.com/view/Static%20Analysis/job/clair-analysis/${env.BUILD_NUMBER}/HTML_Report/&quot;,
+//                tokenCredentialId: &apos;Slack-Jenkins-Clair-Analysis&apos;
+//        }
+    } catch(error) {
+        // if any exception occurs, mark the build as failed
+        currentBuild.result = &apos;FAILURE&apos;
+        throw error
+    } finally {
+        deleteDir()
+    }
+}</script>
+    <sandbox>false</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>

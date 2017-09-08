@@ -44,7 +44,7 @@ Por el contrario, todo este proceso puede ser automatizado en Ruby gracias a bun
 \begin{itemize}
 	\item bundler-audit analiza las vulnerabilidades en las versiones de las gemas contenidas en el archivo de dependencias \textit{Gemfile.lock} de la aplicación.
 	\item Analiza las fuentes de dependencias que puedan ser inseguras (http://).
-	\item Permite especificar avisos de seguridad que serán ignorados en el análisis\todo{iNCLUIR ESTO EN LAS PRUEBAS}, bien por ser un riesgo asumido por el desarrollador, una vulnerabilidad ya conocida y en la que se está actualmente trabajando o cualquier otro motivo.
+	\item Permite especificar avisos de seguridad que serán ignorados en el análisis, bien por ser un riesgo asumido por el desarrollador, una vulnerabilidad ya conocida y en la que se está actualmente trabajando o cualquier otro motivo.
 	\item No requiere de conexión a internet para cada ejecución que se realice del análisis.
 	\item Funciona cruzando la información de dependencias recogidas del fichero \textit{Gemfile.lock} con una lista de vulnerabilidades conocidas\cite{advisorydb2017}, basada en información pública existente en bases de datos como \gls{CVE}\footnote{Lista de información registrada sobre vulnerabilidades conocidas, definida y mantenida por The MITRE Corporation}.
 \end{itemize}

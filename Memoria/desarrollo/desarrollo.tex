@@ -107,7 +107,7 @@ Una vez definidos todos los elementos, la ejecución del sistema se resume en la
 	\label{compose}
 \end{figure}
 
-\subsection{Probando los componentes desplegados}
+\subsection{Probando los componentes desplegados}\label{probando}
 
 Ahora que todos los sistemas están funcionando en el sistema de contenedores es momento de comprobar que la configuración proporcionada es la correcta y que el comportamiento es el esperado. Para ello, y antes de automatizar las tareas con la ayuda de Jenkins, se van a realizar desde el interfaz de comandos las instrucciones necesarias que confirmen que los análisis se están llevando a cabo sin problema por parte de las herramientas de análisis.
 
@@ -298,7 +298,7 @@ En primer lugar, la \autoref{jenkins_01} muestra el mensaje de bienvenida que el
 \end{figure}
 
 
-\begin{figure}[htbp]
+\begin{figure}[!htbp]
 	\centering
 	\includegraphics[width=1.0\linewidth]
 	{desarrollo/figuras/jenkins_02.png}
@@ -307,7 +307,6 @@ En primer lugar, la \autoref{jenkins_01} muestra el mensaje de bienvenida que el
 \end{figure}
 
 Una vez superado la pantalla de bienvenida a la aplicación, se podrá decidir los plugins que serán instalados al inicio (\autoref{jenkins_03}) y comenzará el proceso de instalación inicial de plugins (\autoref{jenkins_04}).
-
 
 \begin{figure}[htbp]
 	\centering
@@ -365,7 +364,7 @@ Una vez Jenkins está configurado, lo primero que se deberá hacer para poder ll
 
 Tras aplicar la instalación del plugin, y como muestra la \autoref{jenkins_09}, Jenkins se reiniciará, devolviendo al usuario al panel principal (\autoref{jenkins_10}) de la aplicación, con el entorno completamente configurado para comenzar a añadir los trabajos de Jenkins que automatizarán el proceso de análisis.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=1.0\linewidth]
 	{desarrollo/figuras/jenkins_09.png}
@@ -385,13 +384,89 @@ Tras aplicar la instalación del plugin, y como muestra la \autoref{jenkins_09},
 
 En la sección actual se va a utilizar el contenido empleado en los apartados de la \autoref{preparacion} para mostrar al lector la creación de tareas o trabajos en la plataforma de \gls{IC} Jenkins, con el fin de automatizar el proceso de análisis de las dependencias de código de aplicaciones escritas mediante los lenguajes de programación Ruby y Node.js, asi como el análisis de las posibles vulnerabilidades que pudieran mantener los contenedores de Docker utilizados por la compañía.
 
+\subsection{Análisis de dependencias Ruby y Node.js}
+
+Como se pudo comprobar en la sección \ref{probando}, el modo de utilización de las herramientas y componentes necesarios para la comprobación de las dependencias de código de ruby y node es muy similar y los pasos ha seguir en el proceso son los mimos, por lo que el apartado actual va a describir de forma exhaustiva la creación del trabajo de Jenkins para el análisis de dependencias de código en ruby, para terminar  mostrando el resultado de la ejecución de ambos trabajos (ruby y node) en Jenkins.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.95\linewidth]
+	{desarrollo/figuras/ruby_01.png}
+	\caption{Creando el nuevo trabajo de Jenkins "analisis-dependencias-ruby"}
+	\label{ruby_01}
+\end{figure}
+
+En primer lugar es necesario crear el nuevo trabajo de Jenkins, para eso desde la pantalla principal de la aplicación se debe hacer clic en la opción "New Item". La \autoref{ruby_01} muestra la pantalla de creación de nuevo trabajo, en el proceso de crear un trabajo tipo pipeline llamado "analisis-dependencias-ruby".
+
+A continuación, Se definirán aspectos tales como los parámetros de entrada, la dependencia con repositorios externos o la periodicidad con la que la tarea será ejecutada automáticamente. La \autoref{ruby_02} muestra lo comentado, permitiendo definir para la entrada una variable que contendrá los repositorios a analizar, así como una ejecución automática diaria para la misma.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=1.00\linewidth]
+	{desarrollo/figuras/ruby_02.png}
+	\caption{Configurando la tarea}
+	\label{ruby_02}
+\end{figure}
+
+Por último, se describe la funcionalidad que la tarea va a realizar, utilizando el lenguaje de programación Groovy, un lenguaje de programación orientado a objetos implementado sobre la plataforma Java. El código utilizado para programar la tarea puede ser encontrado utilizando la información proporcionada en el Apéndice \ref{ap-01}. Las fases de ejecución seguidas para definirla son los siguientes:
+
+\begin{enumerate}
+	\item Utilizando la API proporcionada por GitHub y la herramienta de interfaz de comandos, se van a descargar los ficheros Gemfile y Gemfile.lock del repositorio indicado en el parámetro de entrada, así como el archivo \textit{.bundle-auditrc} utilizado para seleccionar aquellas vulnerabilidades que se van a obviar. El \autoref{prg04-05} muestra la instrucción \textit{curl} construida para ello. 
+	\begin{lstlisting}[language=,caption={Curl al repositorio GitHub}, breaklines=true, label=prg04-05]
+	curl https://raw.githubusercontent.com/EleazarWorkshare/${RUBY_REPOS[i]}/master/${audit_files[j]} -o ./${RUBY_REPOS[i]}/${audit_files[j]} -f
+	\end{lstlisting}
+	\item Se ejecuta la instrucción del \autoref{prg04-06} para ejecutar el contenedor de docker que contiene la herramienta Bundler Audit, cuyo resultado de la ejecución será devuelto a Jenkins para procesar el contenido y poder convertir el resultado a HTML.
+	\begin{lstlisting}[language=,caption={Ejecutando el análisis de dependencias}, breaklines=true, label=prg04-06]
+	sudo docker run --rm -i -v /var/lib/docker/volumes/entorno_data-jenkins/_data/workspace/analisis-dependencias-ruby/${RUBY_REPOS[i]}/Gemfile.lock:/Gemfile.lock -v /var/lib/docker/volumes/entorno_data-jenkins/_data/workspace/analisis-dependencias-ruby/${RUBY_REPOS[i]}/Gemfile:/Gemfile entorno_ruby-tool:latest bundle-audit check --update ${ignore}
+	\end{lstlisting}
+	\item Desde la tarea de Jenkins se crea y almacena el informe HTML que podrá analizar posteriormente el usuario.
+	\item Se notifica vía Slack de la existencia del nuevo análisis, aportando el enlace directo al informe HTML generado.
+	\item En caso de encontrar vulnerabilidades en las dependencias examinadas, el trabajo realizado por Jenkins será marcado como trabajo fallido, lo que dibujará la ejecución de la tarea de color rojo, indicando al usuario que el resultado no es el deseado. 
+\end{enumerate}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.90\linewidth]
+	{desarrollo/figuras/ruby_03.png}
+	\caption{Panel principal del trabajo analisis-dependencias-ruby}
+	\label{ruby_03}
+\end{figure}
+
+Una vez almacenada la tarea y desde el panel principal de la misma, la opción "Build with Parameters" permitirá su ejecución. La \autoref{ruby_03} muestra el aspecto de dicho panel tras varias ejecuciones.
+
+Y el informe generado será el de la \autoref{ruby_04}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.90\linewidth]
+	{desarrollo/figuras/ruby_04.png}
+	\caption{Informe de vulnerabilidades en dependencias ruby}
+	\label{ruby_04}
+\end{figure}
+
+De tratarse del análisis de dependencias para Node.js, el volumen montado en la instrucción del \autoref{prg04-06} será "package.json", así como el nombre de la imagen utilizada "entorno\_nodejs-tool" con la opción de ejecución "nsp check \texttt{-{}-}output json \texttt{-{}-}warn-only". Las figuras \ref{node_01} y \ref{node_02} muestran el panel principal de la tarea "analisis-dependencias-nodejs" tras varias ejecuciones, así como el informe HTML aportado por la misma.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.90\linewidth]
+	{desarrollo/figuras/node_01.png}
+	\caption{Panel principal del trabajo analisis-dependencias-nodejs}
+	\label{node_01}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.90\linewidth]
+	{desarrollo/figuras/node_02.png}
+	\caption{Informe de vulnerabilidades en dependencias node}
+	\label{node_02}
+\end{figure}
+
+
 \subsection{Análisis de imágenes Docker}
 
-En primer lugar, 
+EXPLICAR EL TRABAJO DE JENKINS PARA ANALIZAR LA IMAGEN DE DOCKER.
 
-\subsection{Análisis de dependencias Ruby}
-
-\subsection{Análisis de de dependencias Node.js}
 
 \section{Evaluación de la solución}
 
