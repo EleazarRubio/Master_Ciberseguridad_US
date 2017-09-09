@@ -382,11 +382,11 @@ Tras aplicar la instalación del plugin, y como muestra la \autoref{jenkins_09},
 
 \section{Trabajando con Jenkins}\label{trabajando_jenkins}
 
-En la sección actual se va a utilizar el contenido empleado en los apartados de la \autoref{preparacion} para mostrar al lector la creación de tareas o trabajos en la plataforma de \gls{IC} Jenkins, con el fin de automatizar el proceso de análisis de las dependencias de código de aplicaciones escritas mediante los lenguajes de programación Ruby y Node.js, asi como el análisis de las posibles vulnerabilidades que pudieran mantener los contenedores de Docker utilizados por la compañía.
+En la sección actual se va a utilizar el contenido empleado en los apartados de la \autoref{preparacion} para mostrar al lector la creación de tareas o trabajos en la plataforma de \gls{IC} Jenkins, con el fin de automatizar el proceso de análisis de las dependencias de código para aplicaciones escritas mediante los lenguajes de programación Ruby y Node.js, asi como el análisis de las posibles vulnerabilidades que pudieran mantener los contenedores de Docker utilizados por la compañía.
 
 \subsection{Análisis de dependencias Ruby y Node.js}
 
-Como se pudo comprobar en la sección \ref{probando}, el modo de utilización de las herramientas y componentes necesarios para la comprobación de las dependencias de código de ruby y node es muy similar y los pasos ha seguir en el proceso son los mimos, por lo que el apartado actual va a describir de forma exhaustiva la creación del trabajo de Jenkins para el análisis de dependencias de código en ruby, para terminar  mostrando el resultado de la ejecución de ambos trabajos (ruby y node) en Jenkins.
+Como se pudo comprobar en la sección \ref{probando}, el modo de utilización de las herramientas y componentes necesarios para la comprobación de las dependencias de código de ruby y node y los pasos ha seguir durante el proceso son similares, por lo que el apartado actual va a describir de forma exhaustiva la creación del trabajo de Jenkins para el análisis de dependencias de código en ruby, para terminar mostrando el resultado de la ejecución de ambos trabajos (ruby y node) en Jenkins.
 
 \begin{figure}[htbp]
 	\centering
@@ -408,7 +408,7 @@ A continuación, Se definirán aspectos tales como los parámetros de entrada, l
 	\label{ruby_02}
 \end{figure}
 
-Por último, se describe la funcionalidad que la tarea va a realizar, utilizando el lenguaje de programación Groovy, un lenguaje de programación orientado a objetos implementado sobre la plataforma Java. El código utilizado para programar la tarea puede ser encontrado utilizando la información proporcionada en el Apéndice \ref{ap-01}. Las fases de ejecución seguidas para definirla son los siguientes:
+Por último, se describe la funcionalidad que la tarea va a realizar, utilizando el lenguaje de programación Groovy, un lenguaje de programación orientado a objetos implementado sobre la plataforma Java. El código utilizado para programar la tarea puede ser encontrado mediante la información proporcionada en el Apéndice \ref{ap-01}, por lo que no será presentado en su totalidad en esta memoria. Las fases de ejecución seguidas para definirla son los siguientes:
 
 \begin{enumerate}
 	\item Utilizando la API proporcionada por GitHub y la herramienta de interfaz de comandos, se van a descargar los ficheros Gemfile y Gemfile.lock del repositorio indicado en el parámetro de entrada, así como el archivo \textit{.bundle-auditrc} utilizado para seleccionar aquellas vulnerabilidades que se van a obviar. El \autoref{prg04-05} muestra la instrucción \textit{curl} construida para ello. 
@@ -465,12 +465,52 @@ De tratarse del análisis de dependencias para Node.js, el volumen montado en la
 
 \subsection{Análisis de imágenes Docker}
 
-EXPLICAR EL TRABAJO DE JENKINS PARA ANALIZAR LA IMAGEN DE DOCKER.
+La siguiente tarea que se va a configurar es la encargada de realizar los análisis estáticos sobre las imágenes de Docker, "analisis-imagenes-docker".
 
+Para ello de vuelta a la pantalla principal de la aplicación Jenkins y mediante la opción "New Item", se va a crear una nueva tarea de tipo "pipeline" como la comentada en el apartado anterior. La \autoref{docker_01} muestra los parámetros de entrada que la tarea va a admitir por defecto, además de la configuración del periodo en que dicho análisis será ejecutado automáticamente (una vez al día).
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.90\linewidth]
+	{desarrollo/figuras/docker_01.png}
+	\caption{Configurando la tarea de análisis estático de imágenes Docker}
+	\label{docker_01}
+\end{figure}
+
+Para el trabajo actual se han seleccionado por defecto el análisis de aquellas imágenes que componen el sistema desplegado, lo que permitirá identificar las vulnerabilidades que contiene esta herramienta.
+
+Las fases que componen el trabajo actual de Jenkins son:
+
+\begin{enumerate}
+	\item Como muestra el \autoref{prg04-07}, se invoca al contenedor que alberga a la herramienta Clairctl con los parámetros necesarios para enviar, analizar y devolver el informe resultado del análisis, así como con la configuración de volúmenes, sockets e interfaces de red que van a permitir la correcta comunicación entre Clairctl y Clair. Además de habilitar una ubicación donde Clairctl podrá alojar los informes de manera tal que Jenkins pueda recuperar el contenido y procesarlo para obtener la vista HTML de los mismos.
+	\begin{lstlisting}[language=,caption={Ejecutando Clairctl desde el trabajo de Jenkins}, breaklines=true, label=prg04-07]
+	sudo docker run --rm -t -v entorno_reports:/go/src/github.com/jgsqware/clairctl/reports -v /var/run/docker.sock:/var/run/docker.sock:ro --net entorno_default --link clair_clair:clair -p 57330:57330 entorno_clairctl bash -c "cd /go/src/github.com/jgsqware/clairctl/ ; ./clairctl analyze --log-level info --local $repos ; ./clairctl report --log-level info --local $repos"
+	\end{lstlisting}
+	\item Se almacenan los informes obtenidos como resultado de la ejecución anterior bajo el plugin \textit{HTML Publisher} de jenkins.
+	\item Por último, el resultado del análisis es notificado al canal de Slack correspondiente. 
+\end{enumerate}
+
+Las figuras \ref{docker_02} y \ref{docker_03} muestran la apariencia del panel principal del trabajo de Jenkins y el resultado de visualizar uno de los informes generados, respectivamente.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.90\linewidth]
+	{desarrollo/figuras/docker_02.png}
+	\caption{Ejecuciones del trabajo "analisis-imagenes-docker"}
+	\label{docker_02}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.90\linewidth]
+	{desarrollo/figuras/docker_03.png}
+	\caption{Resultado del informe de vulnerabilidades}
+	\label{docker_03}
+\end{figure}
 
 \section{Evaluación de la solución}
 
-ALGUNAS EJECUCIONES QUE MUESTREN VULNERABILIDADES Y SOLUCIONAR ALGUNA.
+\TODO{ALGUNAS EJECUCIONES QUE MUESTREN VULNERABILIDADES Y SOLUCIONAR ALGUNA}
 
 \section{Resultados obtenidos}
 
