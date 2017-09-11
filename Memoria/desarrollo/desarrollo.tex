@@ -219,7 +219,7 @@ La forma de funcionamiento de Clairctl con Clair es diferente a las vistas para 
 
 \begin{enumerate}
 	\item Enviará la imagen que se quiere analizar a Clair para que la almacene (push). Dicha imagen podrá encontrarse en la máquina local que contiene a Clairctl o en un repositorio de imágenes de internet (pull).
-	\item Clairctl pedirá a Clair que analiza la imagen enviada y le devuelva el resultado de dicho análisis (analyze).
+	\item Clairctl pedirá a Clair que analice la imagen enviada y le devuelva el resultado de dicho análisis (analyze).
 	\item Clairctl generará un informe en formato HTML que podrá ser visualizado en el navegador del usuario.
 \end{enumerate}
 
@@ -510,10 +510,39 @@ Las figuras \ref{docker_02} y \ref{docker_03} muestran la apariencia del panel p
 
 \section{Evaluación de la solución}
 
-\TODO{ALGUNAS EJECUCIONES QUE MUESTREN VULNERABILIDADES Y SOLUCIONAR ALGUNA}
+Una vez el sistema completo está en funcionamiento, basta con observar las vulnerabilidades que presentan las dependencias de código e imágenes docker analizadas para empezar a mitigarlas. Tomando como ejemplo las vulnerabilidades encontradas en las dependencias de la aplicación ruby de la \autoref{ruby_04}, el \autoref{prg04-08} muestra la solución al problema encontrado.
+
+\begin{lstlisting}[language=,caption={Actualizando la dependencia activesupport de ruby}, breaklines=true, label=prg04-08]
+GEM
+	remote: https://rubygems.org/
+	specs:
+		activesupport (4.2.2)
+\end{lstlisting}
+
+Las figuras \ref{ruby_05} y \ref{ruby_06} muestran el nuevo análisis, en esta ocasión positivo, y el informe vacío de vulnerabilidades respectivamente.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.90\linewidth]
+	{desarrollo/figuras/ruby_05.png}
+	\caption{Análisis positivo de dependencias de código ruby}
+	\label{ruby_05}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.90\linewidth]
+	{desarrollo/figuras/ruby_06.png}
+	\caption{Resultado del informe de vulnerabilidades del código depurado}
+	\label{ruby_06}
+\end{figure}
+
+las mismas operaciones pueden ser llevadas a cabo con el objetivo de encontrar solución a las vulnerabilidades encontradas en el resto de los trabajos de Jenkins ejecutados. 
+
+En el caso del análisis de imágenes docker, pueden incluso ser detectadas vulnerabilidades en dependencias del sistema que no van a ser necesarias para la ejecución de la aplicación final que se va a requerir del contenedor desplegado, pudiendo ser estas completamente eliminadas de raíz sin más que modificar la definición del archivo \textit{Dockerfile}.
 
 \section{Resultados obtenidos}
 
-Con la información expuesta en el apartado actual queda demostrado que es posible insertar en el proceso de desarrollo de aplicaciones de la compañía un proceso automático de detección de vulnerabilidades que, lejos de perturbar el trabajo de un desarrollador, le proveerá de informes periódicos que le permitan conocer el estado actual de las dependencias que está implementando, así como advertir el equipo de trabajo DevOps de las vulnerabilidades que pudieran contener los contenedores de aplicación utilizados para dar soporte a estas.
+Con la información expuesta en el apartado actual queda demostrado que es posible insertar en el proceso de desarrollo de aplicaciones de la compañía un sistema automático de detección de vulnerabilidades que, lejos de perturbar el trabajo de un desarrollador, le proveerá de informes periódicos que le permitan conocer el estado actual de las dependencias que está implementando, así como advertir el equipo de trabajo DevOps de las vulnerabilidades que pudieran contener los contenedores de aplicación utilizados para dar soporte a estas.
 
 \endinput
