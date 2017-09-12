@@ -50,15 +50,15 @@ node() {
                 reportFiles: html_list.join(&quot;,&quot;),
                 reportName: &apos;HTML Report&apos;])
         }
-//        stage(&quot;Send notification&quot;) {
-//            def repos_list = []
-//            images.each{ repo, tag -&gt; repos_list.add(&quot;${repo}:${tag}&quot;) }
-//            def repos_string = repos_list.join(&quot;\n&quot;)
-//            slackSend channel: &apos;base-image-analysis&apos;,
-//               color: &apos;#0077FF&apos;,
-//                message: &quot;[GENERATED] Docker images analysis:\n${repos_string}\n HTML report:\nhttps://dev-deploy.workshare.com/view/Static%20Analysis/job/clair-analysis/${env.BUILD_NUMBER}/HTML_Report/&quot;,
-//                tokenCredentialId: &apos;Slack-Jenkins-Clair-Analysis&apos;
-//        }
+        stage(&quot;Send notification&quot;) {
+            def repos_string = DOCKER_REPOS.join(&quot;\n&quot;)
+            slackSend channel: &apos;#analisis-docker&apos;,
+                color: &apos;#0077FF&apos;,
+                message: &quot;[GENERADO] Analisis Docker: \n${repos_string}\nHTML report:\nhttp://jenkins.tfm.com/job/analisis-imagenes-docker/${env.BUILD_NUMBER}/HTML_Report/&quot;,
+                tokenCredentialId: &apos;analisis-docker&apos;
+                baseUrl: &apos;https://tfm-ciberseguridad.slack.com/&apos;
+                teamDomain: &apos;Static Analisis&apos;
+        }
     } catch(error) {
         // if any exception occurs, mark the build as failed
         currentBuild.result = &apos;FAILURE&apos;

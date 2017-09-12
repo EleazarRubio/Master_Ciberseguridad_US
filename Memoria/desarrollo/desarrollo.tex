@@ -380,6 +380,8 @@ Tras aplicar la instalación del plugin, y como muestra la \autoref{jenkins_09},
 	\label{jenkins_10}
 \end{figure}
 
+La configuración necesaria para la integración entre Jenkins y Slack se ha llevado a cabo conforme a la documentación oficial del plugin que le da soporte\cite{slackplugin2017}, siendo necesaria una cuenta Slack para llevarla a cabo. 
+
 \section{Trabajando con Jenkins}\label{trabajando_jenkins}
 
 En la sección actual se va a utilizar el contenido empleado en los apartados de la \autoref{preparacion} para mostrar al lector la creación de tareas o trabajos en la plataforma de \gls{IC} Jenkins, con el fin de automatizar el proceso de análisis de las dependencias de código para aplicaciones escritas mediante los lenguajes de programación Ruby y Node.js, asi como el análisis de las posibles vulnerabilidades que pudieran mantener los contenedores de Docker utilizados por la compañía.
@@ -390,7 +392,7 @@ Como se pudo comprobar en la sección \ref{probando}, el modo de utilización de
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.95\linewidth]
+	\includegraphics[width=1.0\linewidth]
 	{desarrollo/figuras/ruby_01.png}
 	\caption{Creando el nuevo trabajo de Jenkins "analisis-dependencias-ruby"}
 	\label{ruby_01}
@@ -409,6 +411,7 @@ A continuación, Se definirán aspectos tales como los parámetros de entrada, l
 \end{figure}
 
 Por último, se describe la funcionalidad que la tarea va a realizar, utilizando el lenguaje de programación Groovy, un lenguaje de programación orientado a objetos implementado sobre la plataforma Java. El código utilizado para programar la tarea puede ser encontrado mediante la información proporcionada en el Apéndice \ref{ap-01}, por lo que no será presentado en su totalidad en esta memoria. Las fases de ejecución seguidas para definirla son los siguientes:
+\\ \\
 
 \begin{enumerate}
 	\item Utilizando la API proporcionada por GitHub y la herramienta de interfaz de comandos, se van a descargar los ficheros Gemfile y Gemfile.lock del repositorio indicado en el parámetro de entrada, así como el archivo \textit{.bundle-auditrc} utilizado para seleccionar aquellas vulnerabilidades que se van a obviar. El \autoref{prg04-05} muestra la instrucción \textit{curl} construida para ello. 
@@ -416,17 +419,26 @@ Por último, se describe la funcionalidad que la tarea va a realizar, utilizando
 	curl https://raw.githubusercontent.com/EleazarWorkshare/${RUBY_REPOS[i]}/master/${audit_files[j]} -o ./${RUBY_REPOS[i]}/${audit_files[j]} -f
 	\end{lstlisting}
 	\item Se ejecuta la instrucción del \autoref{prg04-06} para ejecutar el contenedor de docker que contiene la herramienta Bundler Audit, cuyo resultado de la ejecución será devuelto a Jenkins para procesar el contenido y poder convertir el resultado a HTML.
+	
 	\begin{lstlisting}[language=,caption={Ejecutando el análisis de dependencias}, breaklines=true, label=prg04-06]
 	sudo docker run --rm -i -v /var/lib/docker/volumes/entorno_data-jenkins/_data/workspace/analisis-dependencias-ruby/${RUBY_REPOS[i]}/Gemfile.lock:/Gemfile.lock -v /var/lib/docker/volumes/entorno_data-jenkins/_data/workspace/analisis-dependencias-ruby/${RUBY_REPOS[i]}/Gemfile:/Gemfile entorno_ruby-tool:latest bundle-audit check --update ${ignore}
 	\end{lstlisting}
 	\item Desde la tarea de Jenkins se crea y almacena el informe HTML que podrá analizar posteriormente el usuario.
-	\item Se notifica vía Slack de la existencia del nuevo análisis, aportando el enlace directo al informe HTML generado.
+	\item Se notifica vía Slack de la existencia del nuevo análisis, aportando el enlace directo al informe HTML generado (\autoref{slack_01}).
 	\item En caso de encontrar vulnerabilidades en las dependencias examinadas, el trabajo realizado por Jenkins será marcado como trabajo fallido, lo que dibujará la ejecución de la tarea de color rojo, indicando al usuario que el resultado no es el deseado. 
 \end{enumerate}
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.90\linewidth]
+	\includegraphics[width=1.0\linewidth]
+	{desarrollo/figuras/slack_01.png}
+	\caption{Notificación de vulnerabilidades Ruby}
+	\label{slack_01}
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=1.0\linewidth]
 	{desarrollo/figuras/ruby_03.png}
 	\caption{Panel principal del trabajo analisis-dependencias-ruby}
 	\label{ruby_03}
@@ -438,17 +450,25 @@ Y el informe generado será el de la \autoref{ruby_04}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.90\linewidth]
+	\includegraphics[width=1.00\linewidth]
 	{desarrollo/figuras/ruby_04.png}
 	\caption{Informe de vulnerabilidades en dependencias ruby}
 	\label{ruby_04}
 \end{figure}
 
-De tratarse del análisis de dependencias para Node.js, el volumen montado en la instrucción del \autoref{prg04-06} será "package.json", así como el nombre de la imagen utilizada "entorno\_nodejs-tool" con la opción de ejecución "nsp check \texttt{-{}-}output json \texttt{-{}-}warn-only". Las figuras \ref{node_01} y \ref{node_02} muestran el panel principal de la tarea "analisis-dependencias-nodejs" tras varias ejecuciones, así como el informe HTML aportado por la misma.
+De tratarse del análisis de dependencias para Node.js, el volumen montado en la instrucción del \autoref{prg04-06} será "package.json", así como el nombre de la imagen utilizada "entorno\_nodejs-tool" con la opción de ejecución "nsp check \texttt{-{}-}output json \texttt{-{}-}warn-only". Las figuras \ref{slack_02}, \ref{node_01} y \ref{node_02} muestran la notificación generada mediante Slack y el panel principal de la tarea "analisis-dependencias-nodejs" tras varias ejecuciones, así como el informe HTML aportado por la misma. 
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=1.0\linewidth]
+	{desarrollo/figuras/slack_02.png}
+	\caption{Notificación de vulnerabilidades NodeJS}
+	\label{slack_02}
+\end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.90\linewidth]
+	\includegraphics[width=1.0\linewidth]
 	{desarrollo/figuras/node_01.png}
 	\caption{Panel principal del trabajo analisis-dependencias-nodejs}
 	\label{node_01}
@@ -456,7 +476,7 @@ De tratarse del análisis de dependencias para Node.js, el volumen montado en la
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.90\linewidth]
+	\includegraphics[width=1.00\linewidth]
 	{desarrollo/figuras/node_02.png}
 	\caption{Informe de vulnerabilidades en dependencias node}
 	\label{node_02}
@@ -471,7 +491,7 @@ Para ello de vuelta a la pantalla principal de la aplicación Jenkins y mediante
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.90\linewidth]
+	\includegraphics[width=1.00\linewidth]
 	{desarrollo/figuras/docker_01.png}
 	\caption{Configurando la tarea de análisis estático de imágenes Docker}
 	\label{docker_01}
@@ -487,14 +507,22 @@ Las fases que componen el trabajo actual de Jenkins son:
 	sudo docker run --rm -t -v entorno_reports:/go/src/github.com/jgsqware/clairctl/reports -v /var/run/docker.sock:/var/run/docker.sock:ro --net entorno_default --link clair_clair:clair -p 57330:57330 entorno_clairctl bash -c "cd /go/src/github.com/jgsqware/clairctl/ ; ./clairctl analyze --log-level info --local $repos ; ./clairctl report --log-level info --local $repos"
 	\end{lstlisting}
 	\item Se almacenan los informes obtenidos como resultado de la ejecución anterior bajo el plugin \textit{HTML Publisher} de jenkins.
-	\item Por último, el resultado del análisis es notificado al canal de Slack correspondiente. 
+	\item Por último, el resultado del análisis es notificado al canal de Slack correspondiente (\autoref{slack_03}). 
 \end{enumerate}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=1.0\linewidth]
+	{desarrollo/figuras/slack_03.png}
+	\caption{Notificación de vulnerabilidades en las imágenes de Docker}
+	\label{slack_03}
+\end{figure}
 
 Las figuras \ref{docker_02} y \ref{docker_03} muestran la apariencia del panel principal del trabajo de Jenkins y el resultado de visualizar uno de los informes generados, respectivamente.
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.90\linewidth]
+	\includegraphics[width=1.00\linewidth]
 	{desarrollo/figuras/docker_02.png}
 	\caption{Ejecuciones del trabajo "analisis-imagenes-docker"}
 	\label{docker_02}
@@ -502,7 +530,7 @@ Las figuras \ref{docker_02} y \ref{docker_03} muestran la apariencia del panel p
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.90\linewidth]
+	\includegraphics[width=1.00\linewidth]
 	{desarrollo/figuras/docker_03.png}
 	\caption{Resultado del informe de vulnerabilidades}
 	\label{docker_03}
@@ -519,11 +547,11 @@ GEM
 		activesupport (4.2.2)
 \end{lstlisting}
 
-Las figuras \ref{ruby_05} y \ref{ruby_06} muestran el nuevo análisis, en esta ocasión positivo, y el informe vacío de vulnerabilidades respectivamente.
+Las figuras \ref{ruby_05} y \ref{ruby_06} muestran el nuevo análisis, en esta ocasión positivo, y el informe vacío de vulnerabilidades respectivamente. Además, la \autoref{slack_04} muestra la notificación recibida a través del canal de Slack, con un resultado positivo.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.90\linewidth]
+	\includegraphics[width=1.00\linewidth]
 	{desarrollo/figuras/ruby_05.png}
 	\caption{Análisis positivo de dependencias de código ruby}
 	\label{ruby_05}
@@ -531,10 +559,18 @@ Las figuras \ref{ruby_05} y \ref{ruby_06} muestran el nuevo análisis, en esta o
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.90\linewidth]
+	\includegraphics[width=1.00\linewidth]
 	{desarrollo/figuras/ruby_06.png}
 	\caption{Resultado del informe de vulnerabilidades del código depurado}
 	\label{ruby_06}
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=1.0\linewidth]
+	{desarrollo/figuras/slack_04.png}
+	\caption{Notificación de vulnerabilidades Ruby positivo}
+	\label{slack_04}
 \end{figure}
 
 las mismas operaciones pueden ser llevadas a cabo con el objetivo de encontrar solución a las vulnerabilidades encontradas en el resto de los trabajos de Jenkins ejecutados. 
@@ -543,6 +579,6 @@ En el caso del análisis de imágenes docker, pueden incluso ser detectadas vuln
 
 \section{Resultados obtenidos}
 
-Con la información expuesta en el apartado actual queda demostrado que es posible insertar en el proceso de desarrollo de aplicaciones de la compañía un sistema automático de detección de vulnerabilidades que, lejos de perturbar el trabajo de un desarrollador, le proveerá de informes periódicos que le permitan conocer el estado actual de las dependencias que está implementando, así como advertir el equipo de trabajo DevOps de las vulnerabilidades que pudieran contener los contenedores de aplicación utilizados para dar soporte a estas.
+Con la información expuesta en el apartado actual queda demostrado que es posible insertar en el proceso de desarrollo de aplicaciones de la compañía un sistema automático de detección de vulnerabilidades que, lejos de perturbar el trabajo de un desarrollador, le proveerá de informes periódicos que le permitan conocer el estado actual de las dependencias que está implementando, así como advertir al equipo de trabajo DevOps de las vulnerabilidades que pudieran contener los contenedores de aplicación utilizados para dar soporte a estas.
 
 \endinput

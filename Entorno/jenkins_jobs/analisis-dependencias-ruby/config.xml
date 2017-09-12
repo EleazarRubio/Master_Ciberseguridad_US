@@ -24,8 +24,8 @@
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.39">
     <script>def RUBY_REPOS = RUBY_REPOS.split(&quot; &quot;)
 def fail = false
-def repos_affected = &quot;Repos affected:\n&quot;
-def repos_not_affected = &quot;Repos examined:\n&quot;
+def repos_affected = &quot;Repositorios afectados:\n&quot;
+def repos_not_affected = &quot;Repositorios examinados:\n&quot;
 def audit_files = [&quot;.bundle-auditrc&quot;, &quot;Gemfile.lock&quot;, &quot;Gemfile&quot;]
 
 node() {
@@ -64,26 +64,28 @@ node() {
             }
             writeFile encoding: &apos;UTF-8&apos;, file: &quot;./reports/index.html&quot;, text: &quot;${index}&quot;
             publishHTML(
-                [allowMissing: false,
+                [allowMissing: true,
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
                 reportDir: &apos;reports&apos;,
                 reportFiles: &apos;index.html&apos;,
                 reportName: &apos;HTML Report&apos;])
         }
-//        stage(&apos;Notify generated report&apos;) {
-//            if (fail == true){
-//               slackSend channel: &apos;static-analysis&apos;,
-//                      color: &apos;#FF0000&apos;,
-//                      message: &quot;[FAILED] Ruby analysis - Vulnerabilities found!\n${repos_affected}\nHTML report:\nhttps://{URL_TO_THE_REPORT}/${env.BUILD_NUMBER}/HTML_Report/&quot;,
-//                      tokenCredentialId: &apos;Slack-Jenkins-Ruby&apos;
-//            } else {
-//                slackSend channel: &apos;static-analysis&apos;,
-//                      color: &apos;#008000&apos;,
-//                      message: &quot;[OK] Ruby analysis - No vulnerabilities found!\n${repos_not_affected}&quot;,
-//                      tokenCredentialId: &apos;Slack-Jenkins-Ruby&apos;
-//            }
-//        }
+        stage(&apos;Notify generated report&apos;) {
+            if (fail == true){
+               slackSend channel: &apos;#analisis-dependencias&apos;,
+                    color: &apos;#FF0000&apos;,
+                    message: &quot;[FAILED] Analisis Ruby - Encontradas vulnerabilidades!\n${repos_affected}\nHTML report:\nhttp://jenkins.tfm.com/job/analisis-dependencias-ruby/${env.BUILD_NUMBER}/HTML_Report/&quot;,
+                    tokenCredentialId: &apos;analisis-dependencias&apos;
+                    baseUrl: &apos;https://tfm-ciberseguridad.slack.com/&apos;
+                    teamDomain: &apos;Static Analisis&apos;
+            } else {
+                slackSend channel: &apos;#analisis-dependencias&apos;,
+                    color: &apos;#008000&apos;,
+                    message: &quot;[OK] Analisis Ruby - Vulnerabilidades no encontradas!\n${repos_not_affected}&quot;,
+                    tokenCredentialId: &apos;analisis-dependencias&apos;
+            }
+        }
     } catch(Exception e) {
         print(e)
         currentBuild.result = &apos;FAILURE&apos;

@@ -26,8 +26,8 @@
 
 def NODEJS_REPOS = NODEJS_REPOS.split(&quot; &quot;)
 def fail = false
-def repos_affected = &quot;Repos afectados:\n&quot;
-def repos_not_affected = &quot;Repos examinados:\n&quot;
+def repos_affected = &quot;Repositorios afectados:\n&quot;
+def repos_not_affected = &quot;Repositorios examinados:\n&quot;
 def audit_files = [&quot;.nsprc&quot;, &quot;package.json&quot;]
 
 def jsonParse(def string_to_json) {
@@ -83,19 +83,23 @@ node() {
                 reportFiles: &apos;index.html&apos;,
                 reportName: &apos;HTML Report&apos;])
         }
-//        stage(&apos;Notify generated report&apos;) {
-//            if (fail == true){
-//               slackSend channel: &apos;static-analysis&apos;,
-//                      color: &apos;#FF0000&apos;,
-//                      message: &quot;[FAILED] NodeJS analysis - Vulnerabilities found!\n${repos_affected}\nHTML report:\nhttps://{URL}/job/nodejs-analysis/${env.BUILD_NUMBER}/HTML_Report/&quot;,
-//                      tokenCredentialId: &apos;Slack-Jenkins-NodeJS&apos;
-//            } else {
-//                slackSend channel: &apos;static-analysis&apos;,
-//                      color: &apos;#008000&apos;,
-//                      message: &quot;[OK] NodeJS analysis - No vulnerabilities found!\n${repos_not_affected}&quot;,
-//                      tokenCredentialId: &apos;Slack-Jenkins-NodeJS&apos;
-//            }
-//        }
+        stage(&apos;Notify generated report&apos;) {
+            if (fail == true){
+               slackSend channel: &apos;#analisis-dependencias&apos;,
+                    color: &apos;#FF0000&apos;,
+                    message: &quot;[FAILED] Analisis NodeJS - Encontradas vulnerabilidades!\n${repos_affected}\nHTML report:\nhttp://jenkins.tfm.com/job/analisis-dependencias-nodejs/${env.BUILD_NUMBER}/HTML_Report/&quot;,
+                    tokenCredentialId: &apos;analisis-dependencias&apos;
+                    baseUrl: &apos;https://tfm-ciberseguridad.slack.com/&apos;
+                    teamDomain: &apos;Static Analisis&apos;
+            } else {
+                slackSend channel: &apos;#analisis-dependencias&apos;,
+                    color: &apos;#008000&apos;,
+                    message: &quot;[OK] Analisis NodeJS - !\n${repos_not_affected}&quot;,
+                    tokenCredentialId: &apos;analisis-dependencias&apos;
+                    baseUrl: &apos;https://tfm-ciberseguridad.slack.com/&apos;
+                    teamDomain: &apos;Static Analisis&apos;
+            }
+        }
     } catch(Exception e) {
         print(e)
         currentBuild.result = &apos;FAILURE&apos;
