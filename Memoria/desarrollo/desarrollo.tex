@@ -3,7 +3,7 @@
 \chapter{Desarrollo de la solución}\label{chp-04}
 \epigraph{As an engineer, you learn there is a solution to every problem. It may take you a while, but eventually you're going to find it.}{Tony Cárdenas\\American politician}
 
-\lettrine[lraise=-0.1, lines=2, loversize=0.2]{E}{l} apartado actual está dedicado a comprender el proceso seguido durante el desarrollo de la solución realizada. Comenzando con una introducción que sitúe al lector en condiciones que le permitan reproducir el proceso presentado y los primeros pasos a seguir en la preparación del entorno, desplegando los sistemas que componen dicha solución, para así continuar automatizando el proceso en vistas a un uso prolongado en el tiempo. Por último, se evaluará la solución obtenida en un proceso de verificación de la solución mostrando el resultado final obtenido.
+\lettrine[lraise=-0.1, lines=2, loversize=0.2]{E}{l} apartado actual está dedicado a comprender el proceso seguido durante el desarrollo de la solución realizada. Comenzando con una introducción que sitúe al lector en condiciones que le permitan reproducir el proceso presentado y los primeros pasos a seguir en la preparación del entorno, desplegando los sistemas que componen dicha solución, para así continuar automatizando el proceso en vistas a un uso prolongado en el tiempo. Por último, se evaluará la solución obtenida en un proceso de verificación de la solución, mostrando el resultado final obtenido.
 
 \section{Preparación del entorno de trabajo}\label{preparacion}
 
@@ -278,7 +278,7 @@ La \autoref{informe} muestra el resultado generado por Clairctl en el análisis 
 	\centering
 	\includegraphics[width=1.0\linewidth]
 	{desarrollo/figuras/informe_clairctl.png}
-	\caption{Inorme generado por Clairctl}
+	\caption{Informe generado por Clairctl}
 	\label{informe}
 \end{figure}
 
@@ -324,7 +324,7 @@ Una vez superado la pantalla de bienvenida a la aplicación, se podrá decidir l
 	\label{jenkins_04}
 \end{figure}
 
-El último paso de la preparación inicial será crear al primero de los usuarios administrador de la aplicación, la \autoref{jenkins_05} muestra al usuario creado.
+El último paso de la preparación inicial será crear al primero de los usuarios administradores de la aplicación, la \autoref{jenkins_05} muestra al usuario creado.
 
 \begin{figure}[htbp]
 	\centering
@@ -487,7 +487,7 @@ De tratarse del análisis de dependencias para Node.js, el volumen montado en la
 
 La siguiente tarea que se va a configurar es la encargada de realizar los análisis estáticos sobre las imágenes de Docker, "analisis-imagenes-docker".
 
-Para ello de vuelta a la pantalla principal de la aplicación Jenkins y mediante la opción "New Item", se va a crear una nueva tarea de tipo "pipeline" como la comentada en el apartado anterior. La \autoref{docker_01} muestra los parámetros de entrada que la tarea va a admitir por defecto, además de la configuración del periodo en que dicho análisis será ejecutado automáticamente (una vez al día).
+Para ello de vuelta a la pantalla principal de la aplicación Jenkins y mediante la opción "New Item", se va a crear una nueva tarea de tipo "pipeline" como la comentada en el apartado anterior. La \autoref{docker_01} muestra los parámetros de entrada que la tarea va a admitir por defecto, estableciendo la configuración del periodo en que dicho análisis será ejecutado automáticamente como una vez al día.
 
 \begin{figure}[htbp]
 	\centering
@@ -547,7 +547,7 @@ GEM
 		activesupport (4.2.2)
 \end{lstlisting}
 
-Las figuras \ref{ruby_05} y \ref{ruby_06} muestran el nuevo análisis, en esta ocasión positivo, y el informe vacío de vulnerabilidades respectivamente. Además, la \autoref{slack_04} muestra la notificación recibida a través del canal de Slack, con un resultado positivo.
+Las figuras \ref{ruby_05} y \ref{ruby_06} descubren los resultados del nuevo análisis, en esta ocasión positivo, y el informe vacío de vulnerabilidades respectivamente. Además, con la \autoref{slack_04} se observa la notificación recibida a través del canal de Slack, con un resultado positivo.
 
 \begin{figure}[H]
 	\centering
@@ -575,7 +575,7 @@ Las figuras \ref{ruby_05} y \ref{ruby_06} muestran el nuevo análisis, en esta o
 
 las mismas operaciones pueden ser llevadas a cabo con el objetivo de encontrar solución a las vulnerabilidades encontradas en el resto de los trabajos de Jenkins ejecutados. 
 
-En el caso del análisis de imágenes docker, pueden incluso ser detectadas vulnerabilidades en dependencias del sistema que no van a ser necesarias para la ejecución de la aplicación final que se va a requerir del contenedor desplegado, pudiendo ser estas completamente eliminadas de raíz sin más que modificar la definición del archivo \textit{Dockerfile}.
+En el caso del análisis de imágenes docker, pueden incluso ser detectadas vulnerabilidades en dependencias del sistema que no van a ser necesarias para la ejecución de la aplicación final que se va a requerir del contenedor desplegado, aunque vengan previamente incluidas en la imagen de este, pudiendo ser completamente eliminadas de raíz sin más que modificar la definición del archivo \textit{Dockerfile}.
 
 \section{Resultados obtenidos}
 

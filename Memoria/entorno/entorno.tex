@@ -28,7 +28,7 @@ A continuación se muestran algunas de las características que han llevado a Gi
 	\item Tras haber realizado un fork de un proyecto y haber realizado algunos ajuste, introducido alguna mejora o arreglado algún problema que pudiera contener, es posible integrar los cambios realizados al proyecto original (previa supervisión de su propietario, administrador o alguno de sus colaboradores), por lo que un repositorio puede llegar a ser construido mediante la contribución de una gran comunidad de desarrolladores.
 	\item GitHub posee un sistema propio de notificaciones con el que poder estar informado de lo que ocurre en torno a un repositorio concreto, ya sea privado a la compañía o público a la comunidad.
 	\item GitHub trae incorporado un visor de código, mediante el cual (y a través del navegador) es posible consultar el contenido de un archivo determinado, con la sintaxis correspondiente al lenguaje utilizado y sin necesidad de descargar una copia del mismo.
-	\item Cada repositorio de \gls{SW} albergado en GitHub cuenta con su propio seguimiento de incidencias, con un elaborado sistema de tickets, de manera tal que cualquier colaborador (o usuario en general) pueda reportar algún problema encontrado en la utilización el código o pueda simplemente sugerir nuevas características para que sean implementadas.
+	\item Cada repositorio de \gls{SW} albergado en GitHub cuenta con su propio seguimiento de incidencias, con un elaborado sistema de tickets, de manera tal que cualquier colaborador (o usuario en general) pueda reportar algún problema encontrado en la utilización del código o pueda simplemente sugerir nuevas características para que sean implementadas.
 	\item Al ser una plataforma web es totalmente independiente al \gls{SO} utilizado, siendo por otro lado Git compatible con los principales sistemas actuales: Linux, Windows, OSX.
 	\item GitHub es gratuito e ilimitado para repositorios de proyectos públicos, sólo aquellos usuarios que deseen mantener proyectos en privado deberán pagar una cuota. 
 \end{itemize}
@@ -127,7 +127,7 @@ Su utilización es simple, permitiendo incluso ignorar vulnerabilidades que pued
 
 Docker (\autoref{docker-logo}) es una herramienta de virtualización diseñada para aportar beneficios a desarrolladores, testers y administradores de sistemas, creando contenedores ligeros y portables para que las aplicaciones puedan ser ejecutadas en cualquier máquina, con sólo tener docker instalado e independientemente del \gls{SO} de la propia máquina que lo contenga\cite{garciaoterino2015}. Esta plataforma de código abierto hace uso de las funciones de aislamiento de recursos que provee el kernel de Linux para dar lugar a contenedores independientes, dentro de los cuales se ejecutará una única aplicación con sus respectivas dependencias, funcionando siempre con este único kernel, en lugar de virtualizar uno por cada contenedor o máquina virtual.
 
-En sus orígenes, la tecnología Docker fue creada por encima de la tecnología LXC (término comúnmente relacionado con los contenedores Linux "tradicionales"), aunque actualmente está alejado de esta dependencia debido a que, a pesar de tener utilidad como virtualización ligera, no cuenta con un gran desarrollo como respaldo ni una gran experiencia de usuario. La tecnología Docker proporciona más que la capacidad de ejecutar contenedores, también facilita el proceso de creación y diseño de contenedores mediante el envío de imágenes y versionado de imágenes. La \autoref{docker-esquema} muestra una clara diferencias en las capas aportadas por cada uno de estos modos de virtualización de contenedores.
+En sus orígenes, la tecnología Docker fue creada por encima de la tecnología LXC (término comúnmente relacionado con los contenedores Linux "tradicionales"), aunque actualmente está alejado de esta dependencia debido a que, a pesar de tener utilidad como virtualización ligera, no cuenta con un gran desarrollo como respaldo ni una gran experiencia de usuario. La tecnología Docker proporciona más que la capacidad de ejecutar contenedores, también facilita el proceso de creación y diseño de contenedores mediante el envío y versionado de imágenes. La \autoref{docker-esquema} muestra una clara diferencias en las capas aportadas por cada uno de estos modos de virtualización de contenedores.
 
 \begin{figure}[htbp]
 	\centering
@@ -144,7 +144,7 @@ Además, virtualizar con docker ofrece una serie de ventajas respecto a hacerlo 
 \begin{itemize}
 	\item \textbf{Portabilidad.} Los contenedores son portables, por lo que pueden ser trasladados fácilmente a cualquier otro equipo con Docker sin tener que volver a configurar nada.
 	\item \textbf{Ligereza.} Al no virtualizar un sistema completo, sino solo lo necesario, el consumo de recursos es muy inferior.
-	\item \textbf{Autosuficiencia.} Docker se encarga de todo de organizarlo todo, por lo que los contenedores tan solo deben tener lo necesario para que la aplicación funcione.
+	\item \textbf{Autosuficiencia.} Docker se encarga de organizarlo todo, por lo que los contenedores tan solo deben tener lo necesario para que la aplicación funcione.
 \end{itemize}
 
 Un sistema de contenedores Docker lo componen principalmente 5 elementos fundamentales:
@@ -152,9 +152,9 @@ Un sistema de contenedores Docker lo componen principalmente 5 elementos fundame
 \begin{itemize}
 	\item Demonio: proceso principal de la plataforma.
 	\item Cliente: binario que constituye la interfaz al usuario y le permite interactuar con el Demonio.
-	\item Imagen: Plantilla utilizada para crear el contenedor de la aplicación que se va a ejecutar en su interior. Dicha plantilla recibe el nombre por defecto de \textit{Dockerfile}.
-	\item Registros: Directorios donde se almacenan las imágenes, tanto de acceso público como privado y similares a los utilizados por Linux, donde los usuarios publican sus propios contenedores de manera que aquellos otros usuarios que los necesiten puedan descargarlos directamente desde allí.
-	\item Contenedores: Donde se almacena todo lo necesario (librerías, dependencias, binarios de la aplicación, etc.) para que la aplicación pueda ejecutarse de forma aislada.
+	\item Imagen: plantilla utilizada para crear el contenedor de la aplicación que se va a ejecutar en su interior. Dicha plantilla recibe el nombre por defecto de \textit{Dockerfile}.
+	\item Registros: directorios donde se almacenan las imágenes, tanto de acceso público como privado y similares a los utilizados por Linux, donde los usuarios publican sus propios contenedores de manera que aquellos otros usuarios que los necesiten puedan descargarlos directamente desde allí.
+	\item Contenedores: donde se almacena todo lo necesario (librerías, dependencias, binarios de la aplicación, etc.) para que la aplicación pueda ejecutarse de forma aislada.
 \end{itemize}
 
 Actualmente existen multitud de empresas que utilizan a docker como sistema de contenedores en sus centros de datos (Spotify, eBay, PayPal, etc.) y cuenta con el apoyo de grandes compañías de internet como Amazon o Google, lo que permite que Docker se encuentre en un proceso continuo de crecimiento y mejora.
@@ -210,8 +210,8 @@ Jenkins posee, entre otras, las siguientes ventajas:
 	\item \textbf{Fácil configuración}: Jenkins aporta una configuración mediante interfaz web de fácil manejo, que incluye análisis instantáneos de errores y ayuda en compilaciones.
 	\item \textbf{Extensible}: Jenkins dispone de cientos de plugins en su centro de actualizaciones, capaz de ser integrados prácticamente con cualquier herramienta necesaria en los procesos de integración continua y despliegue continuo.
 	\item \textbf{Distribuido}: Jenkins puede distribuir fácilmente el trabajo en varias máquinas, lo que ayuda a generar mejoras, pruebas y despliegues en varias plataformas rápidamente.
-	\item \textbf{Open Source}: Es una herramienta de código libre con el apoyo de una gran comunidad.
-	\item \textbf{Soporte de repositorio de control de versiones}: Gracias a Jenkins, el código puede ser descargado directamente desde un repositorio de contro de versiones (GitHub, BitBucket, etc.) con multitud de opciones.
+	\item \textbf{Open Source}: Es una herramienta de código abierto con el apoyo de una gran comunidad.
+	\item \textbf{Soporte de repositorio de control de versiones}: Gracias a Jenkins, el código puede ser descargado directamente desde un repositorio de control de versiones (GitHub, BitBucket, etc.) con multitud de opciones.
 	\item \textbf{Soporte de scripts}: Puede ejecutar scripts de bash, shell, ANT y proyectos Maven.
 	\item \textbf{Notificaciones}: Jenkins puede ser utilizado para publicar resultados y enviar emails de notificación de los mismos.
 \end{itemize}
