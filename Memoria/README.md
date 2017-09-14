@@ -1,5 +1,4 @@
 # Seguridad en la integración continua de la metodología ágil y la filosofía DevOps
-====================================================================================
 
 ## Resumen
 
